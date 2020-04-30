@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+              font-family: Helvetica, Arial, sans-serif
+          }
+          h1 {
+              background-color: #2a5599;
+              color: white;
+              padding: 5px;
+              margin: 0px;
+          }
+          svg {
+              border: solid 1px black;
+          }
+          .mainView {
+              display: flex;
+              flex-direction: row;
+          }
+          .info{
+              display: flex;
+              justify-content: center;
+              margin-bottom: 30px;
+          }
+           div.tc{
+  width: 100px;
+  text-align: center;
+  color:#808080;
+  width: 100px;
+  padding: 0 1em;
+  line-height: 1.2;
+  font-size: .9em;
+  vertical-align: top;
+  border-right:1px dotted #BDBDBD;
+}
+div.tc1{
+  width: 100px;
+  text-align: center;
+  color:#808080;
+  width: 100px;
+  padding: 0 1em;
+  line-height: 1.2;
+  font-size: .9em;
+  vertical-align: top;
+  border-right:1px dotted #BDBDBD;
+}
+div.tc2{
+  width: 100px;
+  text-align: center;
+  color:#808080;
+  width: 100px;
+  padding: 0 1em;
+  line-height: 1.2;
+  font-size: .9em;
+  vertical-align: top;
+  border-right:1px dotted #BDBDBD;
+}
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID-19 in Australia</title>
+      <script src="./d3-lasso.min.js"></script>
+      <script src="d3.js"></script>
+      <title>COVID-19 Dashboard</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+</head>
+<body>
+    <h1>COVID-19 in Australia</h1>
+    <div class="info">
+        <div class="tc" >Confirmed Cases</div>
+       <div class="tc1">Deaths</div>
+        <div class="tc2">People Recovered</div> 
+        <div style="border-right:1px dotted #BDBDBD; padding: 0 1em;">
+            <form >
+                <label>Choose Case:</label>
+              <select id="options" name="cars" onchange="ddl()">
+                <option value="Confirmed Cases">Confirmed Cases</option>
+                <option value="Death Cases">Death Cases</option>
+                <option value="Recovered Cases">Recovered Cases</option>
+                <!-- <option value="New Cases">New Cases</option> -->
+              </select>
+            </form>
+          </div>
+          <div style="border-right:1px dotted #BDBDBD; padding: 0 1em;">
+            <form >
+                <label>Select Country:</label>
+              <select id="countries" class="chosen" name="countries" onchange="myScript()">
+                
+              </select>
+            </form>
+          </div>
+          <div>
+              <label for="amount">Date range:</label>
+              <input type="text" id="amount" style="border: 0; color: blue; font-weight: bold;" size="30"/>     
+            <div id="slider-range"></div>
+          </div>
+</div>
+    <div class="mainView">
+        <div id="bar">
+            <svg id="BarChart" >
+                
+            </svg>
+        </div>
+        <div>
+            <svg id="Map">
+                <g id="G"></g>
+            </svg>
+        </div>
+        <div>
+            <svg id="line"></svg>
+        </div>
+    </div>
+</body>
+<script>
+    
+
+
+    let store={}
+      let slidedata;
+    //   store.done=[];
+    //   store.afterlasso=[];
+    //   store.mapafterlinelasso={}
+          let x=0
+          let y=0
+          let k=1
+          let deg=0
+          let svg=d3.select("#Map")
+          let currentvis="";
+          div = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+      
+      
+        function loadData() {
+          return Promise.all([
+          d3.json("countries.geo.json"),
+          d3.json('https://opendata.arcgis.com/datasets/b2505177db7f4f1f9a7d62e1bba6b53b_0.geojson'),
+    d3.json('https://services1.arcgis.com/vHnIGBHHqDR6y0CR/arcgis/rest/services/COVID19_Time_Series/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
+          
+          ]).then(datasets => {
+              
+              store.geoJSON=datasets[0];
+              store.geoJSON1 = datasets[1];
+              store.time=datasets[2];
+              return store;
+          })
+      }
+      loadData().then(showdata)
+
+      function showdata()
+      {
+          store.bardata=prepbardata()
+      }
+
+      function prepbardata()
+      {
+          let l=store.time.features.length
+          
+          return store.time.features[l-1].attributes
+      }
+</script>
+</html>
