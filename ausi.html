@@ -57,7 +57,12 @@ div.tc2{
   vertical-align: top;
   border-right:1px dotted #BDBDBD;
 }
-    </style>
+div.tooltip1{
+
+position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;font: 14px calibri; background:white; color: black; border: 2px; border-radius: 8px; pointer-events: none;
+
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COVID-19 in Australia</title>
@@ -202,6 +207,11 @@ div.tc2{
 
       function drawmap(data)
       {
+        div = d3
+        .select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0)
         let width = 600;
         let height = 500;
         let projection = d3.geoMercator()
@@ -220,10 +230,37 @@ div.tc2{
             .on("mousemove",function(d)
             {
               d3.select(this).attr("fill","purple")
+              div
+              .transition()
+              .duration(200)
+              .style("opacity", .9);
+            div
+              .html(
+                "<b>State Name: </b>" +
+                  d.properties.STATE_NAME
+                //   "</br><b>CONFIRMED CASES: </b>" +
+                // d.confirmed +
+                // "</br><b>DEATH CASES: </b>" +
+                // d.deaths +
+                // "</br><b>RECOVERED CASES: </b>" +
+                // d.recovered +
+                //   "</br>AS OF " +
+                // store.date
+              )
+              .attr("class","tooltip1")
+              .style("left", 550 + "px")
+              .style("top", 235 + "px");
+               
+              
             })
             .on("mouseleave",function(d)
             {
               d3.select(this).attr("fill","yellow")
+              div
+              .attr("class","tooltip1")
+              .transition()
+              .duration(500)
+              .style("opacity", 0);
             })
             .append("g")
 
