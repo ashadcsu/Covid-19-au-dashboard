@@ -154,8 +154,25 @@ div.tc2{
           store.bardata=prepbardata()
           drawmap(store.geoJSON)
           total_case_print(store.bardata)
+          store.linedata=prepline()
       }
-
+      function prepline()
+      {
+        let new_data=[]
+        let data=store.time.features
+        data[0].attributes.new_cases=0
+        data[0].attributes.new_deaths=0
+        new_data.push(data[0].attributes)
+        for(let i=1;i<data.length-1;i++)
+        {
+              data[i].attributes.new_cases= data[i].attributes.Total_Cases - data[i-1].attributes.Total_Cases
+              data[i].attributes.new_deaths= data[i].attributes.Total_Deaths - data[i-1].attributes.Total_Deaths
+              if(data[i].attributes.new_cases<0)data[i].attributes.new_cases=0
+              if(data[i].attributes.new_deaths<0)data[i].attributes.new_deaths=0
+              new_data.push(data[i].attributes)
+        }
+        return new_data
+      }
 
 
       function total_case_print(data)
@@ -195,7 +212,7 @@ div.tc2{
                    .projection(projection);
 
         let container=d3.select("#G")
-        container.selectAll("path").data(data.features)
+       let a= container.selectAll("path").data(data.features)
             .enter().append("path")
             .attr("d",d=>path(d) )
             .attr("fill","yellow")
@@ -208,6 +225,21 @@ div.tc2{
             {
               d3.select(this).attr("fill","yellow")
             })
+            .append("g")
+
+// container.append("g")
+// .append("text")
+// .text("hello")
+            
+//             container.selectAll("text")
+//         .data(container.selectAll("path"))
+//         .enter().append("svg:text")
+//     .text(function(d){
+//       console.log(d)
+//         return d.STATE_NAME;
+//     }).attr("transform", d => `translate(${projection([d.lon,d.lat])[0]},${projection([d.lon,d.lat])[1]})`)
+// .attr("text-anchor","middle")
+//     .attr('font-size','2pt');
         
 
       }
