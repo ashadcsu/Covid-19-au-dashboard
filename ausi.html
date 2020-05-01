@@ -417,8 +417,83 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
       function prepbardata()
       {
           let l=store.time.features.length
+
+          let d=[]
+        let ln=store.time.features[l-1].attributes
+
+        let a={
+          region: "ACT",
+          confirmed: ln.ACT,
+          death: ln.ACT_Deaths
+        }
+
+        d.push(a)
+
+
+         a={
+          region: "NSW",
+          confirmed: ln.NSW,
+          death: ln.NSW_Deaths
+        }
+
+        d.push(a)
+
+
+
+         a={
+          region: "NT",
+          confirmed: ln.NT,
+          death: ln.NT_Deaths
+        }
+
+        d.push(a)
+
+
+         a={
+          region: "QLD",
+          confirmed: ln.QLD,
+          death: ln.QLD_Deaths
+        }
+
+        d.push(a)
+
+
+
+       a={
+          region: "SA",
+          confirmed: ln.SA,
+          death: ln.SA_Deaths
+        }
+
+        d.push(a)
+
+
+         a={
+          region: "TAS",
+          confirmed: ln.TAS,
+          death: ln.TAS_Deaths
+        }
+
+        d.push(a)
+
+
+         a={
+          region: "VIC",
+          confirmed: ln.VIC,
+          death: ln.VIC_Deaths
+        }
+
+        d.push(a)
+
+         a={
+          region: "WA",
+          confirmed: ln.WA,
+          death: ln.WA_Deaths
+        }
+
+        d.push(a)
           
-          return store.time.features[l-1].attributes
+           return d
       }
 
       //Draw line here
