@@ -289,7 +289,7 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
         
           store.bardata=prepbardata()
           drawmap(store.geoJSON)
-          total_case_print(store.bardata)
+          total_case_print(store.time.features[store.time.features.length-1].attributes)
           store.linedata=prepline()
           drawline(store.linedata)
           groupbytime()
