@@ -2,6 +2,12 @@
 <html lang="en">
 <head>
     <style>
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
         body {
               font-family: Helvetica, Arial, sans-serif;
               background-color:#DCDCDC;
@@ -57,11 +63,52 @@ div.tc2{
   vertical-align: top;
   border-right:1px dotted #BDBDBD;
 }
+.lasso path {
+  stroke: rgb(80,80,80);
+  stroke-width:2px;
+}
+
+.lasso .drawn {
+  fill-opacity:.05 ;
+}
+
+.lasso .loop_close {
+  fill:none;
+  stroke-dasharray: 4,4;
+}
+
+.lasso .origin {
+  fill:#3399FF;
+  fill-opacity:.5;
+}
+
+.not_possible {
+  fill:#415679;
+  
+}
+
+.possible {
+  fill: violet;
+}
+
+.selected {
+  fill : yellow;
+  fill-opacity: 1;
+  stroke: black;
+  stroke-width: 1.5;
+}
+
+.isselected {
+  fill: red;
+}
 div.tooltip1{
 
 position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;font: 14px calibri; background:white; color: black; border: 2px; border-radius: 8px; pointer-events: none;
 
 }
+.line{
+    fill: none;
+	}
 </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,7 +159,9 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
             </svg>
         </div>
         <div>
-            <svg id="line"></svg>
+            <svg id="line" height="450px" width="560px">
+              <g id="body2" style="transform: translate(60px,10px);margin-top:50px ;"></g>
+            </svg>
         </div>
     </div>
 </body>
@@ -160,6 +209,7 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
           drawmap(store.geoJSON)
           total_case_print(store.bardata)
           store.linedata=prepline()
+          drawline(store.linedata)
       }
       function prepline()
       {
@@ -245,7 +295,7 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
                 // "</br><b>RECOVERED CASES: </b>" +
                 // d.recovered +
                 //   "</br>AS OF " +
-                // store.date
+                // store.Date
               )
               .attr("class","tooltip1")
               .style("left", 550 + "px")
@@ -287,5 +337,264 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
           
           return store.time.features[l-1].attributes
       }
+
+      //Draw line here
+
+function drawline(data){
+
+let body = d3.select("#body2")
+document.getElementById("body2").innerHTML="";
+let height = 400;
+let width = 490;
+data.map(d=> {
+ d.Date= new Date(d.Date)
+ d.Total_Cases = +d.Total_Cases
+})
+let max = d3.max(data,d=>d.Total_Cases)
+let yscale = d3.scaleLinear()
+.domain([0,max])
+.range([height,0])
+body.append("g")
+.call(d3.axisLeft(yscale)
+        .ticks(15)
+        .tickFormat(d3.format(".0s")));
+
+
+let xscale = d3.scaleTime()
+.domain(d3.extent(data,d=>d.Date))
+.range([0,width])
+body.append("g")
+.attr("transform", "translate(0,"+height+")")
+.call(d3.axisBottom(xscale)
+.tickFormat(d3.timeFormat("%d %b")))
+.selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)" );
+
+var valueline = d3.line()
+.x(d => xscale(d.Date))
+.y(d => yscale(d.Total_Cases))
+.defined(d => !!d.Total_Cases)
+
+//for tooltip
+
+          
+body.append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width)
+    .attr('height', height)
+    //.on('mousemove', mousemove);
+
+//tool tip
+body
+.append("path")
+.datum(data)
+.attr("fill", "none")
+.attr("stroke", "#2a5599")
+.attr("stroke-width", 3)
+.attr("d", valueline)
+.attr("class", "line")
+.classed("selectedL",function (d) { 
+  if(currentvis == "confirm"){ return false;}
+  else{ return true; }
+  
+
+  })//here we
+/*.on("mouseenter", d=>{
+			
+      showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+.on("mouseleave", d=>{
+      d3.select("#tooltip").style('display', 'none')
+    })
+  .on("mousemove", d=>{
+      showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+*/
+//draw line end 
+
+/// for tooltip
+/*
+var bisect = d3.bisector(function(d) { return d.Date; }).left;
+function mousemove() {
+        // recover coordinate we need
+        var x0 = xscale.invert(d3.mouse(this)[0]);
+        var i = bisect(data, x0, 1);
+        selectedData = data[i]
+        a= selectedData
+
+       
+        
+}
+
+function showtool(check, coord){
+ var val
+ var cas
+ if(check == 1){
+    val = a.confirmed
+    cas = "Confirmed: "
+ }
+ else if(check==2){
+    val = a.recovered
+    cas = "Recovered: "
+
+ }
+ else{
+    val = a.deaths
+    cas = "Deaths: "
+ }
+  var formatDate = d3.timeFormat("%d-%b-%y")
+
+  
+
+		d3.select("#tooltip")
+			.html(cas+val+"<br> Date: "+ formatDate(a.Date))
+			.style('top', coord[1]-15+"px")
+			.style("left", coord[0]+15+"px")
+			.style("display", "block")
+			.style("color", "blue")
+			
+	}
+     */
+//end tooltip
+
+
+//draw deaths
+var valuedth = d3.line()
+.x(d => xscale(d.Date))
+.y(d => yscale(d.Total_Deaths))
+.defined(d => !!d.Total_Deaths)
+
+body
+.append("path")
+.datum(data)
+.attr("fill", "none")
+.attr("stroke", '#cb181d')
+.attr("stroke-width", 3)
+.attr("d", valuedth)
+.attr("class", "line")
+.classed("selectedL",function (d) {
+  if(currentvis == "death"){ return false;}
+  else{ return true; }
+  
+
+  })
+/*.on("mouseenter", d=>{
+			
+      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+.on("mouseleave", d=>{
+      d3.select("#tooltip").style('display', 'none')
+    })
+  .on("mousemove", d=>{
+      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
+    })*/
+    body.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return xscale(d.Date); } )
+      .attr("cy", function (d) { return yscale(d.Total_Cases); } )
+      .attr("case", "confirm")
+      .attr("r", 0)
+      .style("fill", "red")//#69b3a2
+      body.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return xscale(d.Date); } )
+      .attr("cy", function (d) { return yscale(d.Total_Deaths); } )
+      .attr("case", "death")
+      .attr("r", 0)
+      .style("fill", "red")//#69b3a2
+lasso(yscale(1), data, xscale)
+      }
+
+      //end line
+
+      //lasso
+
+      let a;
+function lasso(scal, data, xscale){
+  let body = d3.select("#line")
+  var circles = body.selectAll("circle")
+  // Lasso functions
+        var lasso_start = function() {
+            lasso.items()
+                .attr("r",0) // reset size
+                .classed("not_possible",true)
+                .classed("selected",false);
+        };
+
+        var lasso_draw = function() {
+        
+            
+            lasso.possibleItems()
+                .classed("not_possible",false)
+                .classed("possible",true);
+                
+               
+                
+              
+               
+                //console.log("I am from lasso data")
+
+                
+            
+            lasso.notPossibleItems()
+                .classed("not_possible",true)
+                .classed("possible",false);
+        };
+        var lasso_end = function() {
+            // Reset the color of all dots
+            lasso.items()
+                .classed("not_possible",false)
+                .classed("possible",false);
+                let fcircle = lasso.selectedItems()
+                let newcir = lasso.selectedItems()._groups[0].filter(function(d){ return d.getAttribute("case") == currentvis})
+                fcircle._groups[0] = newcir;
+            // Style the selected dots
+            lasso.selectedItems()
+                .classed("selected",true)
+                .attr("r",2.5)
+                .style("fill", "yellow");
+                var lassod = fcircle._groups[0]
+                var bisect = d3.bisector(function(d) { return d.Date; }).left;
+                let a = lassod;
+                if(a.length){
+                var x1 =xscale.invert(a[0].cx.baseVal.value);
+                var x2 =xscale.invert(a[a.length-1].cx.baseVal.value);
+                //afterlasso(x1,x2)
+                }
+                if(!a.length){
+                  //clearbar()
+                  //drawbar(store.done.sort((a,b)=>b.confirmed - a.confirmed))
+                }
+            // Reset the style of the not selected dots
+            lasso.notSelectedItems()
+                .attr("r",0);
+
+          //console.log(lasso.selectedItems());
+
+        };
+        
+        var lasso = d3.lasso()
+            .closePathSelect(true)
+            .closePathDistance(100)
+            .items(circles)
+            .targetArea(body)
+            .on("start",lasso_start)
+            .on("draw",lasso_draw)
+            .on("end",lasso_end);
+        
+        body.call(lasso);
+}
+
+      //end lasso
 </script>
 </html>
