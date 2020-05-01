@@ -191,13 +191,94 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
           return Promise.all([
           d3.json("au_states.geojson"),
           d3.json('https://opendata.arcgis.com/datasets/b2505177db7f4f1f9a7d62e1bba6b53b_0.geojson'),
-    d3.json('https://services1.arcgis.com/vHnIGBHHqDR6y0CR/arcgis/rest/services/COVID19_Time_Series/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
+    d3.json('https://services1.arcgis.com/vHnIGBHHqDR6y0CR/arcgis/rest/services/COVID19_Time_Series/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json'),
+    d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', (d, rows, cols) => { 
+        
+        const dates = cols.slice(4, cols.length);
+        const data = [];
+          
+        dates.forEach((dd, i)=> {
+          const match = d['Country/Region'];
+          const country = d['Country/Region'];
+          const short = d['Country/Region'];
+          const region = d['Province/State'];
+          const iso = (match !== undefined)?match.iso:'';
+          const lat = d['Lat'];
+          const lon = d['Long'];
+          const date = dd;
+          const confirmed = +d[dd];
+          const pivot = {
+            country: country, short: short, region: region, lat: lat, lon: lon, date: date, confirmed: confirmed, iso: iso
+          }
+          
+          data.push(pivot)
+          
+        })
+        //console.log(data)
+      
+        return data
+       
+      }),
+      d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv', (d, rows, cols) => { 
+        
+        const dates = cols.slice(4, cols.length);
+        const data = [];
+        
+        dates.forEach(dd=> {
+          const match = d['Country/Region']
+          const country = d['Country/Region'];
+          const region = d['Province/State'];
+          const iso = (match !== undefined)?match.iso:'';
+          const lat = d['Lat'];
+          const lon = d['Long'];
+          const date = dd;
+          const deaths = +d[dd];
+          const pivot = {
+            country: country, region: region, lat: lat, lon: lon, date: date, deaths: deaths, iso: iso
+          }
+          
+          data.push(pivot)
+          
+        })
+        
+        return data
+        
+      }),
+      
+      d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv', (d, rows, cols) => { 
+        
+        const dates = cols.slice(4, cols.length);
+        const data = [];
+        
+        dates.forEach(dd=> {
+          const match = d['Country/Region']
+          const country = d['Country/Region'];
+          const region = d['Province/State'];
+          const iso = (match !== undefined)?match.iso:'';
+          const lat = d['Lat'];
+          const lon = d['Long'];
+          const date = dd;
+          const recovered = +d[dd];
+          const pivot = {
+            country: country, region: region, lat: lat, lon: lon, date: date, recovered: recovered, iso: iso
+          }
+          
+          data.push(pivot)
+          
+        })
+        
+        return data
+        
+      })
           
           ]).then(datasets => {
               
               store.geoJSON=datasets[0];
               store.geoJSON1 = datasets[1];
               store.time=datasets[2];
+              store.coronadat=datasets[3];
+              store.death=datasets[4];
+              store.recovered=datasets[5];
               return store;
           })
       }
@@ -205,11 +286,13 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
 
       function showdata()
       {
+        
           store.bardata=prepbardata()
           drawmap(store.geoJSON)
           total_case_print(store.bardata)
           store.linedata=prepline()
           drawline(store.linedata)
+          groupbytime()
       }
       function prepline()
       {
@@ -595,6 +678,256 @@ function lasso(scal, data, xscale){
         body.call(lasso);
 }
 
+
+
+
+
+
+
       //end lasso
+
+
+
+
+
+      ////processs older data///
+
+
+
+
+      function groupbytime()
+      {
+        //console.log("hello")
+        var byCountry = d3.nest()
+          .key(function(d) {
+            return d.country;
+          })
+          .entries(store.coronadat.flat());
+         
+        //console.log(byCountry);
+        b=byCountry[0].values
+        for(i of byCountry)
+        {
+          if(i.values>b){
+            let a={}
+            for(j of i.values)
+            {
+               if (!(j.date in a) && j.country=="Australia")
+               {
+                 a[j.date]={
+                  country: j.country,
+                  lat: j.lat,
+                  lon: j.lon,
+                  iso: j.iso,
+                  date: j.date,
+                  confirmed: j.confirmed
+
+                 }
+              
+
+               }
+               else if(j.date in a && j.country=="Australia"){
+                
+              a[j.date].confirmed+=j.confirmed;
+               }
+
+            }
+            let l=[]
+            for( h in a)
+            {
+              
+              l.push(a[h])
+            }
+          
+            i.values=l
+            
+          }
+
+          
+        }
+       
+
+//////death///////
+        var byCountrydeath = d3.nest()
+          .key(function(d) {
+            return d.country;
+          })
+          .entries(store.death.flat());
+         
+        b=byCountrydeath[0].values
+        for(i of byCountrydeath)
+        {
+          if(i.values>b){
+            let a={}
+            for(j of i.values)
+            {
+               if (!(j.date in a)&& j.country=="Australia")
+               {
+                 a[j.date]={
+                  country: j.country,
+                  lat: j.lat,
+                  lon: j.lon,
+                  iso: j.iso,
+                  date: j.date,
+                  deaths: j.deaths
+
+                 }
+              
+
+               }
+               else if(j.date in a && j.country=="Australia"){
+                
+              a[j.date].deaths+=j.deaths;
+               }
+
+            }
+            let l=[]
+            for( h in a)
+            {
+              
+              l.push(a[h])
+            }
+            i.values=l
+          }
+        }
+        
+
+
+/////////recovered////////
+        var byCountryrecoverd = d3.nest()
+          .key(function(d) {
+            return d.country;
+          })
+          .entries(store.recovered.flat());
+         
+        b=byCountryrecoverd[0].values
+        for(i of byCountryrecoverd)
+        {
+          if(i.values>b){
+            let a={}
+            for(j of i.values)
+            {
+               if (!(j.date in a) && j.country=="Australia")
+               {
+                 a[j.date]={
+                  country: j.country,
+                  lat: j.lat,
+                  lon: j.lon,
+                  iso: j.iso,
+                  date: j.date,
+                  recovered: j.recovered
+
+                 }
+              
+
+               }
+               else if(j.date in a && j.country=="Australia"){
+                
+              a[j.date].recovered+=j.recovered;
+               }
+
+            }
+            let l=[]
+            for( h in a)
+            {
+              
+              l.push(a[h])
+            }
+            i.values=l
+          }
+        }
+
+
+
+      
+      // for(i=0;i<byCountry.length;i++)
+      // {
+      //   for(j=0;j<byCountry[i].values.length;j++)
+      //   {
+      //     byCountry[i].values[j].deaths=byCountrydeath[i].values[j].deaths;
+      //     // byCountry[i].values[j].recovered=byCountryrecoverd[i].values[j].recovered;
+      //      byCountry[i].values[j].active=byCountry[i].values[j].confirmed - byCountry[i].values[j].deaths;
+      //     if (j==0){
+      //     byCountry[i].values[j].new=0}
+      //     else{
+      //       byCountry[i].values[j].new=byCountry[i].values[j].confirmed - byCountry[i].values[j-1].confirmed;
+      //     }
+      //   }
+      // }
+      // for (i of byCountry)
+      // {
+      //    for(j of byCountryrecoverd)
+      //    {
+           
+      //         if(i.key==j.key)
+      //         {
+      //           for( k=0;k<j.values.length;k++)
+      //           {
+      //             i.values[k].recovered=j.values[k].recovered;
+      //             i.values[k].active-=j.values[k].recovered;
+      //           }
+      //           break;
+      //         }
+      //    }
+         
+      // }
+
+      let ln=byCountry[8].values.length
+
+      for(let i=0;i<ln;i++)
+      {
+        byCountry[8].values[i].recovered=byCountryrecoverd[8].values[i].recovered;
+        byCountry[8].values[i].deaths=byCountrydeath[8].values[i].deaths;
+        
+        byCountry[8].values[i].new_confirmed=0
+        byCountry[8].values[i].new_deaths=0
+        byCountry[8].values[i].new_recovered=0
+      
+      
+        
+      }
+
+      for(let i=1;i<ln;i++)
+      {
+        
+        byCountry[8].values[i].new_confirmed= byCountry[8].values[i].confirmed - byCountry[8].values[i-1].confirmed
+        byCountry[8].values[i].new_deaths=byCountry[8].values[i].deaths - byCountry[8].values[i-1].deaths
+        byCountry[8].values[i].new_recovered=byCountry[8].values[i].recovered - byCountry[8].values[i-1].recovered
+      }
+      
+      // // console.log(byCountrydeath)
+      // // console.log(byCountryrecoverd)
+      // // console.log(byCountryrecoverd)
+      //    store.time=byCountry;
+
+      // df=byCountry[0].values.length
+      // k=[]
+      
+      
+      // for(i=0;i<df;i++)
+      // {
+      //   let c=0;
+      //   let d=0;
+      //   let r=0;
+      //   dt=''
+      //   for(j=0;j<store.time.length;j++)
+      //   {
+      //     dt=store.time[j].values[i].date;
+      //     c+=store.time[j].values[i].confirmed;
+      //     d+=store.time[j].values[i].deaths;
+      //     r+=store.time[j].values[i].recovered;
+      //   }
+      //   k.push({
+      //     date:dt,
+      //     confirmed: c,
+      //     deaths: d,
+      //     recovered: r
+      //   })
+           store.sumdate=byCountry[8]
+       
+      // }
+        
+        
+      }
 </script>
 </html>
