@@ -3,7 +3,8 @@
 <head>
     <style>
         body {
-              font-family: Helvetica, Arial, sans-serif
+              font-family: Helvetica, Arial, sans-serif;
+              background-color:#DCDCDC;
           }
           h1 {
               background-color: #2a5599;
@@ -88,14 +89,6 @@ div.tc2{
               </select>
             </form>
           </div>
-          <div style="border-right:1px dotted #BDBDBD; padding: 0 1em;">
-            <form >
-                <label>Select Country:</label>
-              <select id="countries" class="chosen" name="countries" onchange="myScript()">
-                
-              </select>
-            </form>
-          </div>
           <div>
               <label for="amount">Date range:</label>
               <input type="text" id="amount" style="border: 0; color: blue; font-weight: bold;" size="30"/>     
@@ -109,7 +102,7 @@ div.tc2{
             </svg>
         </div>
         <div>
-            <svg id="Map">
+            <svg id="Map" height="500px" width="500px">
                 <g id="G"></g>
             </svg>
         </div>
@@ -142,7 +135,7 @@ div.tc2{
       
         function loadData() {
           return Promise.all([
-          d3.json("countries.geo.json"),
+          d3.json("au_states.geojson"),
           d3.json('https://opendata.arcgis.com/datasets/b2505177db7f4f1f9a7d62e1bba6b53b_0.geojson'),
     d3.json('https://services1.arcgis.com/vHnIGBHHqDR6y0CR/arcgis/rest/services/COVID19_Time_Series/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json')
           
@@ -159,6 +152,64 @@ div.tc2{
       function showdata()
       {
           store.bardata=prepbardata()
+          drawmap(store.geoJSON)
+          total_case_print(store.bardata)
+      }
+
+
+
+      function total_case_print(data)
+      {
+        
+          d3.select(".tc").html(
+"<span style='font-weight:bold;font-size:1.5em;color:#2a5599'>"+data.Total_Cases+"</span>"+ 
+"</br>"+"Confirmed Cases"
+                
+              )
+
+              d3.select(".tc1").html(
+              "<span style='font-weight:bold;font-size:1.5em;color:#cb181d'>"+data.Total_Deaths+"</span>"+
+"</br>"+"Deaths"
+              )
+
+              d3.select(".tc2").html(
+              "<span style='font-weight:bold;font-size:1.5em;color:#238b45'>"+data.Total_Tests+"</span>"+
+"</br>"+"Total Tested"
+              )
+          
+      
+      }
+      
+      
+      
+
+      function drawmap(data)
+      {
+        let width = 600;
+        let height = 500;
+        let projection = d3.geoMercator()
+        projection.scale(509)
+                  .translate([width / 2-1220, height / 2 - 250]);
+
+        let path =d3.geoPath()
+                   .projection(projection);
+
+        let container=d3.select("#G")
+        container.selectAll("path").data(data.features)
+            .enter().append("path")
+            .attr("d",d=>path(d) )
+            .attr("fill","yellow")
+            .attr("stroke","gray")
+            .on("mousemove",function(d)
+            {
+              d3.select(this).attr("fill","purple")
+            })
+            .on("mouseleave",function(d)
+            {
+              d3.select(this).attr("fill","yellow")
+            })
+        
+
       }
 
       function prepbardata()
