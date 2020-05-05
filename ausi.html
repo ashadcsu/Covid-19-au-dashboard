@@ -190,8 +190,6 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
         function loadData() {
           return Promise.all([
           d3.json("au_states.geojson"),
-          d3.json('https://opendata.arcgis.com/datasets/b2505177db7f4f1f9a7d62e1bba6b53b_0.geojson'),
-    d3.json('https://services1.arcgis.com/vHnIGBHHqDR6y0CR/arcgis/rest/services/COVID19_Time_Series/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json'),
     d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', (d, rows, cols) => { 
         
         const dates = cols.slice(4, cols.length);
@@ -274,11 +272,9 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
           ]).then(datasets => {
               
               store.geoJSON=datasets[0];
-              store.geoJSON1 = datasets[1];
-              store.time=datasets[2];
-              store.coronadat=datasets[3];
-              store.death=datasets[4];
-              store.recovered=datasets[5];
+              store.coronadat=datasets[1];
+              store.death=datasets[2];
+              store.recovered=datasets[3];
               return store;
           })
       }
@@ -286,13 +282,11 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
 
       function showdata()
       {
-        
-          store.bardata=prepbardata()
           drawmap(store.geoJSON)
-          total_case_print(store.time.features[store.time.features.length-1].attributes)
-          store.linedata=prepline()
-          drawline(store.linedata)
-          groupbytime()
+         // total_case_print(store.time.features[store.time.features.length-1].attributes)
+         // store.linedata=prepline()
+         // drawline(store.linedata)
+          
       }
       function prepline()
       {
@@ -397,19 +391,6 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
             })
             .append("g")
 
-// container.append("g")
-// .append("text")
-// .text("hello")
-            
-//             container.selectAll("text")
-//         .data(container.selectAll("path"))
-//         .enter().append("svg:text")
-//     .text(function(d){
-//       console.log(d)
-//         return d.STATE_NAME;
-//     }).attr("transform", d => `translate(${projection([d.lon,d.lat])[0]},${projection([d.lon,d.lat])[1]})`)
-// .attr("text-anchor","middle")
-//     .attr('font-size','2pt');
         
 
       }
