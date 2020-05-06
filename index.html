@@ -1561,22 +1561,21 @@
         
         
         function generate_country_list(data){
-          let data1=groupbyCountry(data);
+        
           
           
         
         let countries = [
           
         ];
-        // countries.push("All");
-        for(i of data1)
+        
+        for(i of store.done)
         {
           
-          countries.push(i.country);
+          countries.push(i.region);
         }
        countries= countries.sort()
        countries.unshift("All")
-       countries.push("selected from searchbox")
         ul = document.getElementById("countries");
         
         let render_lists = function(lists){
@@ -1630,9 +1629,9 @@
            {
             
          drawline(store.sumdate)
-            total_case_print(groupbyCountry(store.coronadat))
-          total_case_print1(groupbyCountryDeath(store.death))
-          total_case_print2(groupbyCountryRecovered(store.recovered))
+            total_case_print(store.done)
+          total_case_print1(store.done)
+          total_case_print2(store.done)
           for(j=0;j<205;j++)
             {
               i=d3.selectAll("rect")._groups[0][j];
@@ -2108,8 +2107,8 @@
                 .style("opacity", .9);
               div
               .html(
-                  "<b>COUNTRY: </b>" +
-                    d.country +
+                  "<b>REGION: </b>" +
+                    d.region +
                     "</br><b>CONFIRMED CASES: </b>" +
                   d.confirmed +
                   "</br><b>Death CASES: </b>" +
@@ -2975,19 +2974,14 @@
             
             a[j] = {
               "country" : x.values[0].country,
+              "region" : x.values[0].region,
               "confirmed" : c,
               "recovered" : r,
               "deaths" : d,
               "date" :   x.values[end].date       }
             j++;
           }
-          //console.log(a)
-          // sdate = new Date(d1);
-          // sdate.getDate()+ '/' + (sdate.getMonth()+1) + '/' +sdate.getFullYear();
-          // edate = new Date(d2);
-          // edate.getDate()+ '/' + (edate.getMonth()+1) + '/' +edate.getFullYear();
-          // console.log(d1,d2)
-          // console.log(sdate,edate)
+          
           
           if(currentvis=="confirm")a = a.sort((a,b)=>b.confirmed-a.confirmed);
           else if(currentvis=="death")a = a.sort((a,b)=>b.deaths - a.deaths);
@@ -2996,18 +2990,14 @@
   
   
           
-            for(i=0;i<a.length;i++)
+          for(i=0;i<a.length;i++)
             {
                 
-                b=a[i].country;
-                // a[i].deaths=k[i].deaths;
-                // a[i].recovered=z[i].recovered;
-                if(b=="US"){
-                    b="United States of America"
-                }
-                for (j of store.mapafterlinelasso.features)
+                b=a[i].region;
+                
+                for (j of store.geoJSON.features)
                 {
-                    if(j.properties.name==b)
+                    if(j.properties.STATE_NAME==b)
                     {
                         j.confirmed=a[i].confirmed;
                         j.deaths=a[i].deaths;
@@ -3024,7 +3014,7 @@
                     
                 }
             }
-            for (i of store.mapafterlinelasso.features)
+            for (i of store.geoJSON.features)
             {
                 if(!('confirmed' in i)){
                     i.confirmed=0;
