@@ -142,7 +142,7 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
             </form>
           </div>
           <div>
-              <label for="amount">Date range:</label>
+              <label for="amount">date range:</label>
               <input type="text" id="amount" style="border: 0; color: blue; font-weight: bold;" size="30"/>     
             <div id="slider-range"></div>
           </div>
@@ -291,8 +291,8 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
           drawmap(store.geoJSON)
           total_case_print(store.time.features[store.time.features.length-1].attributes)
           store.linedata=prepline()
-          drawline(store.linedata)
           groupbytime()
+          drawline(store.sumdate.values)
       }
       function prepline()
       {
@@ -303,8 +303,8 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
         new_data.push(data[0].attributes)
         for(let i=1;i<data.length-1;i++)
         {
-              data[i].attributes.new_cases= data[i].attributes.Total_Cases - data[i-1].attributes.Total_Cases
-              data[i].attributes.new_deaths= data[i].attributes.Total_Deaths - data[i-1].attributes.Total_Deaths
+              data[i].attributes.new_cases= data[i].attributes.confirmed - data[i-1].attributes.confirmed
+              data[i].attributes.new_deaths= data[i].attributes.deaths - data[i-1].attributes.deaths
               if(data[i].attributes.new_cases<0)data[i].attributes.new_cases=0
               if(data[i].attributes.new_deaths<0)data[i].attributes.new_deaths=0
               new_data.push(data[i].attributes)
@@ -317,13 +317,13 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
       {
         
           d3.select(".tc").html(
-"<span style='font-weight:bold;font-size:1.5em;color:#2a5599'>"+data.Total_Cases+"</span>"+ 
+"<span style='font-weight:bold;font-size:1.5em;color:#2a5599'>"+data.confirmed+"</span>"+ 
 "</br>"+"Confirmed Cases"
                 
               )
 
               d3.select(".tc1").html(
-              "<span style='font-weight:bold;font-size:1.5em;color:#cb181d'>"+data.Total_Deaths+"</span>"+
+              "<span style='font-weight:bold;font-size:1.5em;color:#cb181d'>"+data.deaths+"</span>"+
 "</br>"+"Deaths"
               )
 
@@ -378,7 +378,7 @@ position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;
                 // "</br><b>RECOVERED CASES: </b>" +
                 // d.recovered +
                 //   "</br>AS OF " +
-                // store.Date
+                // store.date
               )
               .attr("class","tooltip1")
               .style("left", 550 + "px")
@@ -505,10 +505,10 @@ document.getElementById("body2").innerHTML="";
 let height = 400;
 let width = 490;
 data.map(d=> {
- d.Date= new Date(d.Date)
- d.Total_Cases = +d.Total_Cases
+ d.date= new Date(d.date)
+ d.confirmed = +d.confirmed
 })
-let max = d3.max(data,d=>d.Total_Cases)
+let max = d3.max(data,d=>d.confirmed)
 let yscale = d3.scaleLinear()
 .domain([0,max])
 .range([height,0])
@@ -519,7 +519,7 @@ body.append("g")
 
 
 let xscale = d3.scaleTime()
-.domain(d3.extent(data,d=>d.Date))
+.domain(d3.extent(data,d=>d.date))
 .range([0,width])
 body.append("g")
 .attr("transform", "translate(0,"+height+")")
@@ -532,9 +532,9 @@ body.append("g")
             .attr("transform", "rotate(-65)" );
 
 var valueline = d3.line()
-.x(d => xscale(d.Date))
-.y(d => yscale(d.Total_Cases))
-.defined(d => !!d.Total_Cases)
+.x(d => xscale(d.date))
+.y(d => yscale(d.confirmed))
+.defined(d => !!d.confirmed)
 
 //for tooltip
 
@@ -576,7 +576,7 @@ body
 
 /// for tooltip
 /*
-var bisect = d3.bisector(function(d) { return d.Date; }).left;
+var bisect = d3.bisector(function(d) { return d.date; }).left;
 function mousemove() {
         // recover coordinate we need
         var x0 = xscale.invert(d3.mouse(this)[0]);
@@ -604,12 +604,12 @@ function showtool(check, coord){
     val = a.deaths
     cas = "Deaths: "
  }
-  var formatDate = d3.timeFormat("%d-%b-%y")
+  var formatdate = d3.timeFormat("%d-%b-%y")
 
   
 
 		d3.select("#tooltip")
-			.html(cas+val+"<br> Date: "+ formatDate(a.Date))
+			.html(cas+val+"<br> date: "+ formatdate(a.date))
 			.style('top', coord[1]-15+"px")
 			.style("left", coord[0]+15+"px")
 			.style("display", "block")
@@ -622,9 +622,9 @@ function showtool(check, coord){
 
 //draw deaths
 var valuedth = d3.line()
-.x(d => xscale(d.Date))
-.y(d => yscale(d.Total_Deaths))
-.defined(d => !!d.Total_Deaths)
+.x(d => xscale(d.date))
+.y(d => yscale(d.deaths))
+.defined(d => !!d.deaths)
 
 body
 .append("path")
@@ -655,8 +655,8 @@ body
     .data(data)
     .enter()
     .append("circle")
-      .attr("cx", function (d) { return xscale(d.Date); } )
-      .attr("cy", function (d) { return yscale(d.Total_Cases); } )
+      .attr("cx", function (d) { return xscale(d.date); } )
+      .attr("cy", function (d) { return yscale(d.confirmed); } )
       .attr("case", "confirm")
       .attr("r", 0)
       .style("fill", "red")//#69b3a2
@@ -665,11 +665,29 @@ body
     .data(data)
     .enter()
     .append("circle")
-      .attr("cx", function (d) { return xscale(d.Date); } )
-      .attr("cy", function (d) { return yscale(d.Total_Deaths); } )
+      .attr("cx", function (d) { return xscale(d.date); } )
+      .attr("cy", function (d) { return yscale(d.deaths); } )
       .attr("case", "death")
       .attr("r", 0)
       .style("fill", "red")//#69b3a2
+
+//draw bar here
+/*
+let join = body.selectAll('rect')
+		    .data(data)
+
+		    join.enter()
+		    .append("rect")
+		    .attr("fill", "blue")
+		    .attr("width", d=> xscale(d.date))
+		    .attr("height",50)
+		    .attr("y",d=>yscale(d.new_confirmed))*/
+
+//end bar
+
+
+
+
 lasso(yscale(1), data, xscale)
       }
 
@@ -722,7 +740,7 @@ function lasso(scal, data, xscale){
                 .attr("r",2.5)
                 .style("fill", "yellow");
                 var lassod = fcircle._groups[0]
-                var bisect = d3.bisector(function(d) { return d.Date; }).left;
+                var bisect = d3.bisector(function(d) { return d.date; }).left;
                 let a = lassod;
                 if(a.length){
                 var x1 =xscale.invert(a[0].cx.baseVal.value);
