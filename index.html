@@ -367,7 +367,7 @@
             </div>
             <div>
                 <div> 
-                  <svg id="container" height="500px" width="500px"> 
+                  <svg id="container" height="500px" width="640px"> 
                     <g id="body2" style="transform: translate(60px,10px);margin-top:50px ;"></g>
                 </svg>
                 </div>
@@ -2570,21 +2570,30 @@
   function drawline(data){
   
   // draw line here
-  
   let body = d3.select("#body2")
   document.getElementById("body2").innerHTML="";
   let height = 450;
-  let width = 430;
+  let width = 530;
   data.map(d=> {
    d.date= new Date(d.date)
    d.confirmed = +d.confirmed
   })
   let max = d3.max(data,d=>d.confirmed)
+  let barmax = d3.max(data,d=>d.new_case)
+  let Yscale = d3.scaleLinear()
+  .domain([0,barmax])
+  .range([height,0])
   let yscale = d3.scaleLinear()
   .domain([0,max])
   .range([height,0])
   body.append("g")
   .call(d3.axisLeft(yscale)
+          .ticks(15)
+          .tickFormat(d3.format(".02s")));
+  var nh = width+5;
+  body.append("g")
+  .attr("transform", "translate("+nh+",0)")
+  .call(d3.axisRight(Yscale)
           .ticks(15)
           .tickFormat(d3.format(".02s")));
   
@@ -2606,9 +2615,19 @@
   .x(d => xscale(d.date))
   .y(d => yscale(d.confirmed))
   .defined(d => !!d.confirmed)
-  
   //for tooltip
-  
+     // bar chart here
+     body.selectAll(".bar")
+    .data(data)
+  .enter().append("rect")
+    .attr("fill", "teal")
+    .attr("class", "bar")
+    .style("margin-top", "10px")
+    .attr("x", function(d) { return xscale(d.date); })
+    .attr("width", "4px")
+    .attr("y", function(d) { return Yscale(d.new_case); })
+    .attr("height", function(d) { return height - Yscale(d.new_case)});
+    //end
             
   body.append('rect')
       .style("fill", "none")
@@ -2629,7 +2648,6 @@
   .classed("selectedL",function (d) { 
     if(currentvis == "confirm"){ return false;}
     else{ return true; }
-    
   
     })//here we
   .on("mouseenter", d=>{
@@ -2754,9 +2772,9 @@
       })
   //end deaths
   // legend
-  var columnHeaders = ["Deaths", "Recovered", "Confirmed"];
+  var columnHeaders = ["New cases","Deaths", "Recovered", "Confirmed"];
   var color = d3.scaleOrdinal().range(
-    ["#2a5599" ,'#238b45','#cb181d']);
+    ["#2a5599" ,'#238b45','#cb181d',"teal"]);
   
     var legend = body.selectAll(".legend")
       .data(columnHeaders.slice().reverse())
@@ -2819,6 +2837,8 @@
   
   
   }
+  
+  
   
    
         loadData().then(showData);
