@@ -517,7 +517,7 @@
         
           
             function getMapConfig(){
-          let width = 600;
+          let width = 460;
           let height = 500;
           let container=d3.select("#G")
           let zoom = d3.zoom()
@@ -554,7 +554,7 @@
           let {width, height} = config;
           let projection = d3.geoMercator()
           projection.scale(509)
-                  .translate([width / 2-1220, height / 2 - 250]);
+                  .translate([width / 2-1180, height / 2 - 250]);
                     
           store.mapProjection = projection;
           return projection;
@@ -777,6 +777,102 @@
   
   
   
+        var lasso_start = function() {
+                    lasso.items() // reset size
+                        .classed("not_possible",true)
+                        .classed("selected",false)
+                        .classed("selected1",false);
+                };
+        
+                var lasso_draw = function() {
+                
+                    // Style the possible dots
+                    lasso.possibleItems()
+                        .classed("not_possible",false)
+                        .classed("possible",true)
+                        .classed("selected1",false);
+            
+                    // Style the not possible dot
+                    lasso.notPossibleItems()
+                        .classed("not_possible",true)
+                        .classed("possible",false)
+                        .classed("selected1",false);
+                };
+        
+                var lasso_end = function() {
+                    // Reset the color of all dots
+                    lasso.items()
+                        .classed("not_possible",false)
+                        .classed("possible",false)
+                        .classed("isselected",false);
+        
+                    // Style the selected dots
+                    lasso.selectedItems()
+                        .classed("selected",true);
+  
+  
+                        if(lasso.selectedItems()._groups[0].length==0)
+                    {
+                      d3.select(".res").text("Showing Results for All Countries");
+                    }
+                    if(lasso.selectedItems()._groups[0].length>0)
+                    {
+                    d3.select(".res").text("Showing Results for selected Countries");
+                    }
+                    
+                    let d=[];
+                    let cn=[];
+                    let dn=[];
+                    for(i of lasso.selectedItems()._groups[0]){
+                if(i.__data__!=null)
+                {
+                  d.push(i.__data__)
+                  cn.push(i.__data__.country)
+                  dn.push(i.__data__.properties.STATE_NAME)
+                }
+        }
+        store.currentselectedcountries=cn;
+        store.afterlasso=d
+        total_case_print(d)
+        total_case_print1(d)
+        total_case_print2(d)
+  
+        l= d3.selectAll("rect")._groups[0]
+        ln=d3.selectAll("rect")._groups[0].length
+       for(i=0;i<ln-115;i++)
+       {
+         if(dn.includes(l[i].__data__.region))
+         {
+          d3.select(l[i]).classed("selected1",false)
+           d3.select(l[i]).classed("selected",true)
+         }
+         else{
+          d3.select(l[i]).classed("selected1",false)
+           d3.select(l[i]).classed("selected",false)
+         }
+       }
+  // console.log()
+  //      if(d.length>0)aftermaplasso(d);
+  //      else drawline(store.sumdate)
+  
+      //  if(store.currentcommand!=null)
+      //    {
+      //      console.log("asci")
+      //      document.getElementById('command').value=store.currentcommand;
+      //      command();
+      //    }
+                };
+                
+                var lasso = d3.lasso()
+                    .closePathSelect(true)
+                    .closePathDistance(100)
+                    .targetArea(container)
+                    .on("start",lasso_start)
+                    .on("draw",lasso_draw)
+                    .on("end",lasso_end);
+        
+                container.call(lasso)
+                lasso.items(container.selectAll('path'))
   
   
         
@@ -1608,21 +1704,25 @@
            if(c=="All")d3.select(".res").text("Showing Results for All Countries");
            else d3.select(".res").text("Showing Results for "+c);
           
-           for(j=0;j<205;j++)
+           l=d3.selectAll("rect")._groups[0];
+           ln=d3.selectAll("rect")._groups[0].length;
+           for(j=0;j<ln;j++)
             {
-              i=d3.selectAll("rect")._groups[0][j];
+            
               
-              d3.select(i).classed("selected1",false)
-                    d3.select(i).classed("selected",false);
+              d3.select(l[i]).classed("selected1",false)
+                    d3.select(l[i]).classed("selected",false);
                     
               
               
             }
-            for(i=0;i<180;i++)
+            l=d3.select("#G").selectAll("path")._groups[0]
+            ln=d3.select("#G").selectAll("path")._groups[0].length
+            for(i=0;i<ln;i++)
         {
-          j=d3.select("#G").selectAll("path")._groups[0][i];
-          d3.select(j).classed("selected",false);
-          d3.select(j).classed("selected1",false)
+          
+          d3.select(l[i]).classed("selected",false);
+          d3.select(l[i]).classed("selected1",false)
         }
             
            if(c=="All")
@@ -1638,158 +1738,34 @@
               d3.select(i).classed("selected",false);
               d3.select(i).classed("selected1",false)
             }
-          return;
+
            }
+
+           l= d3.selectAll("rect")._groups[0]
+        ln=d3.selectAll("rect")._groups[0].length
+       for(i=0;i<ln-115;i++)
+       {
+         if(l[i].__data__.region==c)
+         {
+           d3.select(l[i]).classed("selected",true)
+         }
+         else{
+           d3.select(l[i]).classed("selected",false)
+         }
+       }
+            l=d3.select("#G").selectAll("path")._groups[0]
+            ln=d3.select("#G").selectAll("path")._groups[0].length
+            for(i=0;i<ln-3;i++)
+        {
+          if(l[i].__data__.properties.STATE_NAME==c){
+                    d3.select(l[i]).classed("selected",true);
+              }
+        }
+           
             
   
-            for( j=0;j<=180;j++){
-             i=d3.select("#G").selectAll("circle")._groups[0][j]
-             if(currentvis=="confirm"){
-            if(i.__data__.country==c)
-            {
-              for ( s of store.time){
-           if( s.key == c){ linedata = s; break}
-         }
-         drawline(linedata.values)
-              d3.select(".tc").html(
-  "<span style='font-weight:bold;font-size:1.5em;color:maroon'>"+i.__data__.confirmed+"</span>"+
-  "</br>"+"Confirmed Cases"
-                  
-                )
-  
-                d3.select(".tc1").html(
-                "<span style='font-weight:bold;font-size:1.5em;color:red'>"+i.__data__.deaths+"</span>"+
-  "</br>"+"Deaths"
-                )
-                d3.select(".tc2").html(
-                "<span style='font-weight:bold;font-size:1.5em;color:green'>"+i.__data__.recovered+"</span>"+
-  "</br>"+"People Recovered"
-                )
-  
-              d3.select(i).transition().duration(1000).attr("r",radius(i.__data__.confirmed)+15).attr("fill","red").transition().duration(1000).attr("r",radius(i.__data__.confirmed))
-                .transition().duration(1000).attr("r",radius(i.__data__.confirmed)+15).transition().duration(1000).attr("r",radius(i.__data__.confirmed)).transition().duration(1000).attr("r",0).attr("fill","blue")
-                for(j=0;j<205;j++)
-            {
-              i=d3.selectAll("rect")._groups[0][j];
-              if(i.__data__.country==c){
-                d3.select(i).classed("selected1",false)
-                    d3.select(i).classed("selected",true);
-                    break;
-              }
-              // else{
-              //   d3.select(i).attr("fill","#2a5599")
-              // }
-            }
-  
-            for(i=0;i<180;i++)
-        {
-          j=d3.select("#G").selectAll("path")._groups[0][i];
-          if(j.__data__.country==c){
-            d3.select(j).classed("selected1",false)
-          d3.select(j).classed("selected",true);}
-        }
-                break;
-            }
-             }
-             else if(currentvis=="death"){
-              if(i.__data__.country==c){
-                for ( s of store.time){
-           if( s.key == c){ linedata = s; break}
-         }
-         drawline(linedata.values)
-                d3.select(".tc").html(
-  "<span style='font-weight:bold;font-size:1.5em;color:maroon'>"+i.__data__.confirmed+"</span>"+
-  "</br>"+"Confirmed Cases"
-                  
-                )
-  
-                d3.select(".tc1").html(
-                "<span style='font-weight:bold;font-size:1.5em;color:red'>"+i.__data__.deaths+"</span>"+
-  "</br>"+"Deaths"
-                )
-                d3.select(".tc2").html(
-                "<span style='font-weight:bold;font-size:1.5em;color:green'>"+i.__data__.recovered+"</span>"+
-  "</br>"+"People Recovered"
-                )
-          d3.select(i).transition().duration(1000).attr("r",radius(i.__data__.deaths)+10).attr("fill","blue").transition().duration(1000).attr("r",radius(i.__data__.deaths))
-                .transition().duration(1000).attr("r",radius(i.__data__.deaths)+10).transition().duration(1000).attr("r",radius(i.__data__.deaths)).transition().duration(1000).attr("r",0).attr("fill","red")
-              
-                for(j=0;j<205;j++)
-            {
-              i=d3.selectAll("rect")._groups[0][j];
-              if(i.__data__.country==c){
-                d3.select(i).classed("selected1",false)
-                    d3.select(i).classed("selected",true);
-                    break;
-              }
-              // else{
-              //   d3.select(i).attr("fill","#2a5599")
-              // }
-            }
-  
-            for(i=0;i<180;i++)
-        {
-          j=d3.select("#G").selectAll("path")._groups[0][i];
-          if(j.__data__.country==c){
-            d3.select(j).classed("selected1",false)
-          d3.select(j).classed("selected",true);}
-        }
-  
-              break;
-              }
-  
-              
-             }
-             else if(currentvis=="recovered"){
-              if(i.__data__.country==c){
-                for ( s of store.time){
-           if( s.key == c){ linedata = s; break}
-         }
-         drawline(linedata.values)
-                d3.select(".tc").html(
-  "<span style='font-weight:bold;font-size:1.5em;color:maroon'>"+i.__data__.confirmed+"</span>"+
-  "</br>"+"Confirmed Cases"
-                  
-                )
-  
-                d3.select(".tc1").html(
-                "<span style='font-weight:bold;font-size:1.5em;color:red'>"+i.__data__.deaths+"</span>"+
-  "</br>"+"Deaths"
-                )
-                d3.select(".tc2").html(
-                "<span style='font-weight:bold;font-size:1.5em;color:green'>"+i.__data__.recovered+"</span>"+
-  "</br>"+"People Recovered"
-                )
-                d3.select(i).transition().duration(1000).attr("r",radius(i.__data__.recovered)+10).attr("fill","red").transition().duration(1000).attr("r",radius(i.__data__.recovered))
-               .transition().duration(1000).attr("r",radius(i.__data__.recovered)+10).transition().duration(1000).attr("r",radius(i.__data__.recovered)).transition().duration(1000).attr("r",0).attr("fill","green")
-               
-  
-  
-               for(j=0;j<205;j++)
-            {
-              i=d3.selectAll("rect")._groups[0][j];
-              if(i.__data__.country==c){
-                d3.select(i).classed("selected1",false)
-                    d3.select(i).classed("selected",true);
-                    break;
-              }
-            }
-  
-              for(i=0;i<180;i++)
-        {
-          j=d3.select("#G").selectAll("path")._groups[0][i];
-          if(j.__data__.country==c){
-            d3.select(j).classed("selected1",false)
-          d3.select(j).classed("selected",true);}
-        }
-             
+      
             
-               
-               
-               break;
-              }
-             }
-            }
             
         }
   
@@ -1840,7 +1816,7 @@
             
         }
         else{
-          data=groupbyCountry(store.coronadat)
+          data=store.done
           for(i of data)
             {
               cf+=i.confirmed;
@@ -1872,7 +1848,7 @@
             
         }
         else{
-          data=groupbyCountryDeath(store.death)
+          data=store.done
           for(i of data)
             {
               cf+=i.deaths;
@@ -1905,7 +1881,7 @@
             
         }
         else{
-          data=groupbyCountryRecovered(store.recovered)
+          data=store.done
           for(i of data)
             {
               cf+=i.recovered;
@@ -2137,15 +2113,15 @@
               })
             .on("click", d=>{
                 //console.log(d.country);
-                 myScript1(d.country);
-               // drawline(d.country, store.coronadat)
+        //          myScript1(d.country);
+        //        // drawline(d.country, store.coronadat)
   
-               for ( s of store.time){
-           if( s.key == d.country){ linedata = s; break}
-         }
-        // console.log(linedata.values)
-        slidedata = linedata.values;
-         drawline(linedata.values)
+        //        for ( s of store.time){
+        //    if( s.key == d.country){ linedata = s; break}
+        //  }
+        // // console.log(linedata.values)
+        // slidedata = linedata.values;
+        //  drawline(linedata.values)
          
         });
   
@@ -2187,6 +2163,7 @@
                     
                     let d=[];
                     let cn=[]
+                    let dn=[]
                     if(lasso.selectedItems()._groups[0].length==0)
                     {
                       d3.select(".res").text("Showing Results for All Countries");
@@ -2200,9 +2177,11 @@
                 {
                   d.push(i.__data__)
                   cn.push(i.__data__.country)
+                  dn.push(i.__data__.region)
                 }
         }
         store.currentselectedcountries=cn;
+
         total_case_print(d)
         total_case_print1(d)
         total_case_print2(d)
@@ -2210,9 +2189,11 @@
         store.afterlasso=d
         
        l= d3.select("#G").selectAll("path")._groups[0]
-       for(i=0;i<180;i++)
+       ln=d3.select("#G").selectAll("path")._groups[0].length
+       for(i=0;i<ln-3;i++)
        {
-         if(cn.includes(l[i].__data__.country))
+         console.log(l[i].__data__)
+         if(dn.includes(l[i].__data__.properties.STATE_NAME))
          {
           d3.select(l[i]).classed("selected1",false)
            d3.select(l[i]).classed("selected",true)
@@ -2223,14 +2204,14 @@
          }
        }
   
-       if(d.length>0)afterbarlasso(lasso.selectedItems()._groups[0]);
-       else drawline(store.sumdate)
-       if(store.currentcommand!=null)
-         {
-           console.log("asci")
-           document.getElementById('command').value=store.currentcommand;
-           command();
-         }
+      //  if(d.length>0)afterbarlasso(lasso.selectedItems()._groups[0]);
+      //  else drawline(store.sumdate)
+      //  if(store.currentcommand!=null)
+      //    {
+      //      console.log("asci")
+      //      document.getElementById('command').value=store.currentcommand;
+      //      command();
+      //    }
   
                 };
                 
@@ -3053,9 +3034,9 @@
           clearbar()
           drawbar(a)
   
-           drawCircles(store.done,"red")
-       drawCirclesRecovered(store.done,"red")
-       drawCirclesdeath(store.done,"red")
+      //      drawCircles(store.done,"red")
+      //  drawCirclesRecovered(store.done,"red")
+      //  drawCirclesdeath(store.done,"red")
   
   
       rehiglight()
@@ -3072,58 +3053,58 @@
   
   
   
-      let l= d3.selectAll("rect")._groups[0]
-        let ln=d3.selectAll("rect")._groups[0].length-6
-       for(i=0;i<ln;i++)
-       {
+      // let l= d3.selectAll("rect")._groups[0]
+      //   let ln=d3.selectAll("rect")._groups[0].length-6
+      //  for(i=0;i<ln;i++)
+      //  {
         
         
-         if(store.currentselectedcountries.includes(l[i].__data__.country) || store.currentselectedcountries.includes(l[i].__data__.country.toLowerCase()))
-         {
+      //    if(store.currentselectedcountries.includes(l[i].__data__.country) || store.currentselectedcountries.includes(l[i].__data__.country.toLowerCase()))
+      //    {
            
           
-           d3.select(l[i]).classed("selected",true)
+      //      d3.select(l[i]).classed("selected",true)
           
   
-         }
-         else{
-           d3.select(l[i]).classed("selected",false)
-         }
-       }
+      //    }
+      //    else{
+      //      d3.select(l[i]).classed("selected",false)
+      //    }
+      //  }
   
      }
     
   
     function recalibrate()
     {
-      let a=[]
-      let b=[]
-      let c=[]
-      for(let i=0;i<store.afterlasso.length;i++)
-      {
-        a.push(store.afterlasso[i].country)
-      }
-      store.afterlasso=[]
-       l= d3.selectAll("rect")._groups[0]
-          ln=d3.selectAll("rect")._groups[0].length-6
-          for(i=0;i<ln;i++)
-       {
-         if(a.includes(l[i].__data__.country)){
-          b.push(l[i].__data__);
-         }
-         c.push(l[i].__data__)
-         if(b.length!=0)store.afterlasso=b;
-         else store.afterlasso=c;
+  //     let a=[]
+  //     let b=[]
+  //     let c=[]
+  //     for(let i=0;i<store.afterlasso.length;i++)
+  //     {
+  //       a.push(store.afterlasso[i].country)
+  //     }
+  //     store.afterlasso=[]
+  //      l= d3.selectAll("rect")._groups[0]
+  //         ln=d3.selectAll("rect")._groups[0].length-6
+  //         for(i=0;i<ln;i++)
+  //      {
+  //        if(a.includes(l[i].__data__.country)){
+  //         b.push(l[i].__data__);
+  //        }
+  //        c.push(l[i].__data__)
+  //        if(b.length!=0)store.afterlasso=b;
+  //        else store.afterlasso=c;
          
-       }
-       if(store.afterlasso.length!=207)
-       {
-        var uniqueNames = [];
-  $.each(store.afterlasso, function(i, el){
-      if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
-  });
-    store.afterlasso=uniqueNames
-       }
+  //      }
+  //      if(store.afterlasso.length!=207)
+  //      {
+  //       var uniqueNames = [];
+  // $.each(store.afterlasso, function(i, el){
+  //     if($.inArray(el, uniqueNames) === -1) uniqueNames.push(el);
+  // });
+  //   store.afterlasso=uniqueNames
+  //      }
        
     }
   
