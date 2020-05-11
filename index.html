@@ -50,7 +50,6 @@
             
             .info{
                 display: flex;
-                justify-content: center;
                 margin-top: 30px;
                 margin-bottom: 30px;
             }
@@ -1237,22 +1236,22 @@
             for(i of a)
             {
               l.push({
-                country: i.country,
+                region: i.region,
                 cases: "Confirmed",
                 number: i.confirmed
               })
               l.push({
-                country: i.country,
+                region: i.region,
                 cases: "Active",
                 number: (i.confirmed - (i.recovered + i.deaths))
               })
               l.push({
-                country: i.country,
+                region: i.region,
                 cases: "Recovered",
                 number: i.recovered
               })
               l.push({
-                country: i.country,
+                region: i.region,
                 cases: "Death",
                 number: i.deaths
               })
