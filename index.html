@@ -689,6 +689,7 @@
                  total_case_print1(c)
                  total_case_print2(c)
                  total_case_print3(c)
+                 aftermaplasso(c)
 
               })
   
@@ -911,8 +912,8 @@
          }
        }
   // console.log()
-  //      if(d.length>0)aftermaplasso(d);
-  //      else drawline(store.sumdate)
+      //  if(d.length>0)aftermaplasso(d);
+        if(d.length==0) drawline(store.sumdate)
   
       //  if(store.currentcommand!=null)
       //    {
@@ -2285,7 +2286,7 @@
                 //console.log(d.country);
                 l=d3.selectAll('rect')._groups[0]
                 ln=d3.selectAll('rect')._groups[0].length
-                for(let i=0;i<ln-115;i++)
+                for(let i=0;i<ln-116;i++)
                 {
                   if(l[i].__data__.region==d.region)
                   {
@@ -2303,6 +2304,9 @@
                  total_case_print1(c)
                  total_case_print2(c)
                  total_case_print3(c)
+                 let g=[]
+                 g.push({__data__ : d})
+                 afterbarlasso(g)
                  
         //        // drawline(d.country, store.coronadat)
   
@@ -2393,9 +2397,16 @@
            d3.select(l[i]).classed("selected",false)
          }
        }
-  
-      //  if(d.length>0)afterbarlasso(lasso.selectedItems()._groups[0]);
-      //  else drawline(store.sumdate)
+       let g=[]
+       for(i of d)
+       {
+         g.push({
+           __data__ : i
+         })
+       }
+       
+       if(d.length>0)afterbarlasso(g);
+       if(d.length==0) drawline(store.sumdate)
       //  if(store.currentcommand!=null)
       //    {
       //      console.log("asci")
@@ -3313,13 +3324,14 @@
      // after bar lasso
   
       function afterbarlasso(data){
+        console.log("asci")
         var pdata = []
         var finald = []
         let i = 0;
         for(x of data ){
           for (d of store.time){
             
-                if(x.__data__.country == d.key){
+                if(x.__data__.region == d.key){
                   pdata[i] = d.values;
                   break;
                 }
@@ -3334,10 +3346,17 @@
               "confirmed" : x.confirmed,
               "recovered" : x.recovered,
               "deaths" : x.deaths,
-              "date" :   x.date 
+              "active" : x.active,
+              "date" :   x.date ,
+              "new_case" : x.new,
+              "new_death_case" : x.new_death,
+              "new_recovered_case" : x.new_recovered,
+              "new_active_case" : x.new_active
           }
           ++i;
         }
+
+        //console.log(finald)
   
         for( var k =1; k< pdata.length; ++k){
           let j=0;
@@ -3345,9 +3364,16 @@
             finald[j].confirmed += x.confirmed;
             finald[j].recovered += x.recovered;
             finald[j].deaths += x.deaths
+            finald[j].active += x.active;
+            finald[j].new_case +=x.new_case;
+            finald[j].new_death_case +=x.new_death_case;
+            finald[j].new_recovered_case +=x.new_recovered_case;
+            finald[j].new_active_case += x.new_active_case;
             ++j;
           }
         }
+
+        console.log(finald)
         
         drawline(finald)
       }
@@ -3360,7 +3386,7 @@
         for(x of data ){
           for (d of store.time){
             
-                if(x.country == d.key){
+                if(x.properties.STATE_NAME == d.key){
                   pdata[i] = d.values;
                   break;
                 }
@@ -3375,7 +3401,11 @@
               "confirmed" : x.confirmed,
               "recovered" : x.recovered,
               "deaths" : x.deaths,
-              "date" :   x.date 
+              "date" :   x.date,
+              "new_case" : x.new,
+              "new_death_case" : x.new_death,
+              "new_recovered_case" : x.new_recovered,
+              "new_active_case" : x.new_active
           }
           ++i;
         }
@@ -3385,7 +3415,12 @@
           for( x of pdata[k]){
             finald[j].confirmed += x.confirmed;
             finald[j].recovered += x.recovered;
-            finald[j].deaths += x.deaths
+            finald[j].deaths += x.deaths;
+            finald[j].active += x.active;
+            finald[j].new_case +=x.new_case;
+            finald[j].new_death_case +=x.new_death_case;
+            finald[j].new_recovered_case +=x.new_recovered_case;
+            finald[j].new_active_case += x.new_active_case;
             ++j;
           }
         }
