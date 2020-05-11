@@ -213,7 +213,7 @@
     fill: red;
   }
                                                                             /* previousl 55 */
-            div.tooltip {position: absolute; text-align: left; width: 200px; height: 85px; padding: 15px;font: 14px calibri; background: whitesmoke; color:black; border: 2px; border-radius: 8px; pointer-events: none;}
+            div.tooltip {position: absolute; text-align: left; width: 205px; height: 95px; padding: 15px;font: 14px calibri; background: whitesmoke; color:black; border: 2px; border-radius: 8px; pointer-events: none;}
   div.tooltip1{
   
     position: absolute; text-align: left; width: 200px; height: 95px; padding: 15px;font: 14px calibri; background:whitesmoke; color: black; border: 2px; border-radius: 8px; pointer-events: none;
@@ -647,6 +647,8 @@
                   d.deaths +
                   "</br><b>RECOVERED CASES: </b>" +
                   d.recovered +
+                  "</br><b>ACTIVE CASES: </b>" +
+                  d.active +
                     "</br>AS OF " +
                   store.date
                 )
@@ -896,7 +898,7 @@
   
         l= d3.selectAll("rect")._groups[0]
         ln=d3.selectAll("rect")._groups[0].length
-       for(i=0;i<ln-115;i++)
+       for(i=0;i<ln-116;i++)
        {
          if(dn.includes(l[i].__data__.region))
          {
@@ -1863,7 +1865,7 @@
             
             l=d3.select("#G").selectAll("path")._groups[0]
             ln=d3.select("#G").selectAll("path")._groups[0].length
-            for(let i=0;i<ln-3;i++)
+            for(let i=0;i<ln-4;i++)
             {
               if(l[i].__data__.properties.STATE_NAME==c)
               {
@@ -1886,7 +1888,7 @@
             
         l=d3.selectAll("rect")._groups[0]
         ln=d3.selectAll("rect")._groups[0].length
-        for(let i=0;i<ln-115;i++)
+        for(let i=0;i<ln-116;i++)
         {
           if(l[i].__data__.region==c)
           {
@@ -2048,10 +2050,11 @@
             drawbar(store.done.sort((a,b)=>b.deaths - a.deaths))
             drawMap(prep(store.geoJSON))
             drawline(store.sumdate)
-            drawCirclesdeath(store.done,"red")
+            //drawCirclesdeath(store.done,"red")
             total_case_print(store.done)
           total_case_print1(store.done)
           total_case_print2(store.done)
+          total_case_print3(store.done)
           //d3.select(".res").text("Showing Results of Death Cases for All Countries");
           
             }
@@ -2068,10 +2071,11 @@
             drawbar(store.done.sort((a,b)=>b.confirmed - a.confirmed))
             drawMap(prep(store.geoJSON))
             drawline(store.sumdate)
-            drawCircles(store.done,"blue")
+           // drawCircles(store.done,"blue")
             total_case_print(store.done)
           total_case_print1(store.done)
           total_case_print2(store.done)
+          total_case_print3(store.done)
           //d3.select(".res").text("Showing Results of Confirmed Cases for All Countries");
             }
             else if(selectedValue=="Recovered Cases")
@@ -2086,10 +2090,11 @@
             drawbar(store.done.sort((a,b)=>b.recovered - a.recovered))
             drawMap(prep(store.geoJSON))
             drawline(store.sumdate)
-            drawCirclesRecovered(store.done,"red")
+           // drawCirclesRecovered(store.done,"red")
             total_case_print(store.done)
           total_case_print1(store.done)
           total_case_print2(store.done)
+          total_case_print3(store.done)
          // d3.select(".res").text("Showing Results of Recovered Cases for All Countries");
             }
             else if(selectedValue=="Active Cases")
@@ -2104,10 +2109,11 @@
             drawbar(store.done.sort((a,b)=>b.active - a.active))
             drawMap(prep(store.geoJSON))
             drawline(store.sumdate)
-            drawCirclesRecovered(store.done,"red")
+           // drawCirclesRecovered(store.done,"red")
             total_case_print(store.done)
           total_case_print1(store.done)
           total_case_print2(store.done)
+          total_case_print3(store.done)
             }
             
         }
@@ -2252,6 +2258,8 @@
                   d.deaths +
                   "</br><b>Recovered CASES: </b>" +
                   d.recovered +
+                  "</br><b>ACTIVE CASES: </b>" +
+                  d.active +
                     "</br>AS OF " +
                   d.date
                 )
@@ -2372,7 +2380,7 @@
         
        l= d3.select("#G").selectAll("path")._groups[0]
        ln=d3.select("#G").selectAll("path")._groups[0].length
-       for(i=0;i<ln-3;i++)
+       for(i=0;i<ln-4;i++)
        {
          console.log(l[i].__data__)
          if(dn.includes(l[i].__data__.properties.STATE_NAME))
