@@ -87,6 +87,17 @@
     vertical-align: top;
     border-right:1px dotted gray;
   }
+  div.tc3{
+    width: 100px;
+    text-align: center;
+    color:#808080;
+    width: 100px;
+    padding: 0 1em;
+    line-height: 1.2;
+    font-size: .9em;
+    vertical-align: top;
+    border-right:1px dotted gray;
+  }
   div.res{
     height: 40px;
     width: 350px;
@@ -328,21 +339,23 @@
         <div class="info">
                 <div class="tc" ></div>
                <div class="tc1"></div>
-                <div class="tc2"></div> 
-                <div style="border-right:1px dotted #BDBDBD; padding: 0 1em;">
+                <div class="tc2"></div>
+                <div class="tc3"></div> 
+                <div style="border-right:1px dotted gray; padding: 0 1em;">
                     <form >
                         <label>Choose Case:</label>
                       <select id="options" name="cars" onchange="ddl()">
                         <option value="Confirmed Cases">Confirmed Cases</option>
                         <option value="Death Cases">Death Cases</option>
                         <option value="Recovered Cases">Recovered Cases</option>
+                        <option value="Active Cases">Active Cases</option>
                         <!-- <option value="New Cases">New Cases</option> -->
                       </select>
                     </form>
                   </div>
-                  <div style="border-right:1px dotted #BDBDBD; padding: 0 1em;">
+                  <div style="border-right:1px dotted gray; padding: 0 1em;">
                     <form >
-                        <label>Select Country:</label>
+                        <label>Select State/Territory:</label>
                       <select id="countries" class="chosen" name="countries" onchange="myScript()">
                         
                       </select>
@@ -506,10 +519,11 @@
         // groupbyCountryDeath(store.death)
             //drawCircles(store.done,"blue")
             drawbar(store.done)
-           generate_country_list(store.coronadat)
+           generate_region_list(store.coronadat)
           total_case_print(store.done)
           total_case_print1(store.done)
           total_case_print2(store.done)
+          total_case_print3(store.done)
           
           
         
@@ -517,7 +531,7 @@
         
           
             function getMapConfig(){
-          let width = 460;
+          let width = 480;
           let height = 500;
           let container=d3.select("#G")
           let zoom = d3.zoom()
@@ -578,6 +592,13 @@
           if(mc<i.recovered){
               mc=i.recovered
           }}
+          else if(currentvis=="active")
+          {
+            if(mc<i.active){
+              mc=i.active
+          }
+
+          }
         }
         //console.log(mc)
         clr=[]
@@ -590,6 +611,10 @@
           else if(currentvis=="recovered"){
             clr=["#e5f5e0","#238b45"];
             }
+          else if(currentvis=="active")
+          {
+            clr=["#fff5eb","#f16913"];
+          }
         
         var color_scale =d3.scaleLinear().domain([0,mc]).range(clr);
         
@@ -601,13 +626,14 @@
                   if(currentvis=="confirm")return color_scale(d.confirmed);
                   else if(currentvis=="death")return color_scale(d.deaths);
                   else if(currentvis=="recovered")return color_scale(d.recovered);
+                  else if(currentvis=="active")return color_scale(d.active);
               })
             .attr("stroke", "gray")
             .attr("stroke-width", .5)
             .on("mousemove", function(d) {
                  d3.select(this)
-                 .attr("stroke","black")
-                 .attr("stroke-width", "1px")
+                 .attr("stroke","#000f1a")
+                 .attr("stroke-width", "2px")
                  div
                 .transition()
                 .duration(200)
@@ -626,8 +652,8 @@
                   store.date
                 )
                 .attr("class","tooltip1")
-                .style("left", 790 + "px")
-                .style("top", 235 + "px");
+                .style("left", 650 + "px")
+                .style("top", 175 + "px");
                  
                 })
               .on("mouseleave",function(d){
@@ -638,6 +664,31 @@
                 .transition()
                 .duration(500)
                 .style("opacity", 0);
+              })
+              .on('click',function(d)
+              {
+                //console.log(d)
+                l=d3.select('#G').selectAll('path')._groups[0]
+                ln=d3.select('#G').selectAll('path')._groups[0].length
+                for(let i=0;i<ln-3;i++)
+                {
+                  if(l[i].__data__.properties.STATE_NAME==d.properties.STATE_NAME)
+                  {
+                    d3.select(l[i]).classed('selected',true);
+                  }
+                  else{
+                    d3.select(l[i]).classed('selected',false);
+
+                  }
+                }
+                let c=[]
+                c.push(d)
+                 myScript2(d.properties.STATE_NAME);
+                 total_case_print(c)
+                 total_case_print1(c)
+                 total_case_print2(c)
+                 total_case_print3(c)
+
               })
   
   
@@ -668,7 +719,8 @@
         {
           if(currentvis=="confirm")return "#deebf7";
           else if(currentvis=="recovered")return "#f7fcf5";
-          else return "#fee0d2";
+          else if(currentvis=="death") return "#fee0d2";
+          else return "#fff5eb";
         }
         )
         .attr("stop-opacity", 1);
@@ -679,7 +731,8 @@
         {
           if(currentvis=="confirm")return "#c6dbef";
           else if(currentvis=="recovered")return "#c7e9c0";
-          else return "#fcbba1";
+          else if (currentvis=="death") return "#fcbba1";
+          else return "#fee6ce";
         }
 
         )
@@ -692,7 +745,8 @@
         {
           if(currentvis=="confirm")return "#9ecae1";
           else if(currentvis=="recovered")return "#a1d99b";
-          else return "#fc9272";
+          else if(currentvis=="death") return "#fc9272";
+          else return "#fdd0a2";
         }
          )
         .attr("stop-opacity", 1);
@@ -703,7 +757,8 @@
         {
           if(currentvis=="confirm")return "#6baed6";
           else if(currentvis=="recovered")return "#74c476";
-          else return "#fb6a4a";
+          else if(currentvis=="death") return "#fb6a4a";
+          else return "#fdae6b";
         }
         )
         .attr("stop-opacity", 1);
@@ -714,7 +769,8 @@
         {
           if(currentvis=="confirm")return "#4292c6";
           else if(currentvis=="recovered")return "#41ab5d";
-          else return "#ef3b2c";
+          else if(currentvis=="death")return "#ef3b2c";
+          else return "#fd8d3c";
         }
          )
         .attr("stop-opacity", 1);
@@ -725,7 +781,8 @@
         {
           if(currentvis=="confirm")return "#2171b5";
           else if(currentvis=="recovered")return '#238b45';
-          else return "#ef3b2c";
+          else if(currentvis=="death") return "#ef3b2c";
+          else return "#f16913";
         }
          )
         .attr("stop-opacity", 1);
@@ -836,6 +893,7 @@
         total_case_print(d)
         total_case_print1(d)
         total_case_print2(d)
+        total_case_print3(d)
   
         l= d3.selectAll("rect")._groups[0]
         ln=d3.selectAll("rect")._groups[0].length
@@ -1011,9 +1069,12 @@
             // byCountry[i].values[j].recovered=byCountryrecoverd[i].values[j].recovered;
              byRegion[i].values[j].active=byRegion[i].values[j].confirmed - byRegiondeath[i].values[j].deaths;
             if (j==0){
-            byRegion[i].values[j].new=0}
+            byRegion[i].values[j].new=0
+            byRegion[i].values[j].new_death=0
+            byRegion[i].values[j].new_recovered=0}
             else{
               byRegion[i].values[j].new=byRegion[i].values[j].confirmed - byRegion[i].values[j-1].confirmed;
+              byRegion[i].values[j].new_death=byRegion[i].values[j].deaths - byRegion[i].values[j-1].deaths;
             }
           }
         }
@@ -1028,11 +1089,27 @@
                   {
                     i.values[k].recovered=j.values[k].recovered;
                     i.values[k].active-=j.values[k].recovered;
+                    
                   }
                   break;
                 }
            }
            
+        }
+        for(i=0;i<byRegion.length;i++)
+        {
+          for(j=0;j<byRegion[i].values.length;j++)
+          {
+            
+            if (j==0){
+            byRegion[i].values[j].new_recovered=0;
+            byRegion[i].values[j].new_active=0;
+          }
+            else{
+              byRegion[i].values[j].new_recovered=byRegion[i].values[j].recovered  - byRegion[i].values[j-1].recovered;
+              byRegion[i].values[j].new_active=byRegion[i].values[j].active - byRegion[i].values[j-1].active;
+            }
+          }
         }
         // console.log(byCountryrecoverd)
            store.time=byRegion;
@@ -1052,6 +1129,9 @@
           let r=0;
           let nw=0;
           let ac=0;
+          let ndc=0;
+          let nrc=0;
+          let nac=0;
           dt=''
           for(j=0;j<store.time.length;j++)
           {
@@ -1061,6 +1141,9 @@
             r+=store.time[j].values[i].recovered;
             nw+=store.time[j].values[i].new;
             ac+=store.time[j].values[i].active;
+            ndc+=store.time[j].values[i].new_death;
+            nrc+=store.time[j].values[i].new_recovered;
+            nac+=store.time[j].values[i].new_active;
           }
           k.push({
             date:dt,
@@ -1068,7 +1151,10 @@
             deaths: d,
             recovered: r,
             new_case: nw,
-            active: ac
+            active: ac,
+            new_death_case: ndc,
+            new_recovered_case: nrc,
+            new_active_case: nac
           })
             store.sumdate=k
   
@@ -1102,7 +1188,8 @@
                         j.confirmed=a[i].confirmed;
                         j.deaths=a[i].deaths;
                         j.recovered=a[i].recovered;
-                        j.country=a[i].country
+                        j.country=a[i].country;
+                        j.active=a[i].active;
                         break;
                     }
                     else {
@@ -1120,6 +1207,7 @@
                     i.confirmed=0;
                     i.deaths=0
                     i.recovered=0
+                    i.active=0
                 }
             }
   
@@ -1656,7 +1744,7 @@
         }
         
         
-        function generate_country_list(data){
+        function generate_region_list(data){
         
           
           
@@ -1772,30 +1860,45 @@
         function myScript1(e){
           
           let c=e
-           for( j=0;j<=180;j++){
-            i=d3.select("#G").selectAll("circle")._groups[0][j]
-            if(currentvis=="confirm"){
-           if(i.__data__.country==c)
-           {
+        
             
-             d3.select(i).transition().duration(1000).attr("r",radius(i.__data__.confirmed)+15).attr("fill","red").transition().duration(1000).attr("r",radius(i.__data__.confirmed))
-               .transition().duration(1000).attr("r",radius(i.__data__.confirmed)+15).transition().duration(1000).attr("r",radius(i.__data__.confirmed)).transition().duration(1000).attr("r",0).attr("fill","blue")
-           }
+            l=d3.select("#G").selectAll("path")._groups[0]
+            ln=d3.select("#G").selectAll("path")._groups[0].length
+            for(let i=0;i<ln-3;i++)
+            {
+              if(l[i].__data__.properties.STATE_NAME==c)
+              {
+                d3.select(l[i]).classed("selected",true);
+              }
+              else{
+                d3.select(l[i]).classed("selected",false);
+
+              }
+              
             }
-            else if(currentvis=="death"){
-             if(i.__data__.country==c){
-         d3.select(i).transition().duration(1000).attr("r",radius(i.__data__.deaths)+10).attr("fill","blue").transition().duration(1000).attr("r",radius(i.__data__.deaths))
-               .transition().duration(1000).attr("r",radius(i.__data__.deaths)+10).transition().duration(1000).attr("r",radius(i.__data__.deaths)).transition().duration(1000).attr("r",0).attr("fill","red")
-             }
-            }
-            else if(currentvis=="recovered"){
-             if(i.__data__.country==c){
-            d3.select(i).transition().duration(1000).attr("r",radius(i.__data__.recovered)+10).attr("fill","red").transition().duration(1000).attr("r",radius(i.__data__.recovered))
-               .transition().duration(1000).attr("r",radius(i.__data__.recovered)+10).transition().duration(1000).attr("r",radius(i.__data__.recovered)).transition().duration(1000).attr("r",).attr("fill","green")
-             }
-            }
-           }
            
+           
+       }
+
+       function myScript2(e)
+       {
+        let c=e
+        
+            
+        l=d3.selectAll("rect")._groups[0]
+        ln=d3.selectAll("rect")._groups[0].length
+        for(let i=0;i<ln-115;i++)
+        {
+          if(l[i].__data__.region==c)
+          {
+            d3.select(l[i]).classed("selected",true);
+          }
+          else{
+            d3.select(l[i]).classed("selected",false);
+
+          }
+          
+        }
        }
         
         function total_case_print(data)
@@ -1895,6 +1998,38 @@
           
         }
         }
+
+        function total_case_print3(data)
+        {
+          let cf=0;
+          let d;
+          if(data.length!=0){
+            for(i of data)
+            {
+              cf+=i.active;
+        d=i.date;
+            }
+            d3.select(".tc3").html(
+                "<span style='font-weight:bold;font-size:1.5em;color: orange'>"+cf+"</span>"+
+  "</br>"+"Active Cases"
+                )
+            
+        }
+        else{
+          data=store.done
+          for(i of data)
+            {
+              cf+=i.active;
+        d=i.date;
+            }
+            d3.select(".tc3").html(
+                "<span style='font-weight:bold;font-size:1.5em;color: orange'>"+cf+"</span>"+
+  "</br>"+"Active Cases"
+                )
+            
+          
+        }
+        }
         
         function ddl()
         {
@@ -1958,6 +2093,23 @@
           total_case_print2(store.done)
          // d3.select(".res").text("Showing Results of Recovered Cases for All Countries");
             }
+            else if(selectedValue=="Active Cases")
+            {
+              currentvis="active";
+              document.getElementById("countries").value="All";
+            $("#countries").trigger("chosen:updated");
+              d3.select("#G").remove()
+            d3.select("#Map").append("g").attr("id","G")
+            d3.select("#BarChart").remove()
+            d3.select("#Bar").append("svg").attr("id","BarChart").attr("transform", "rotate(90)")
+            drawbar(store.done.sort((a,b)=>b.active - a.active))
+            drawMap(prep(store.geoJSON))
+            drawline(store.sumdate)
+            drawCirclesRecovered(store.done,"red")
+            total_case_print(store.done)
+          total_case_print1(store.done)
+          total_case_print2(store.done)
+            }
             
         }
   
@@ -1996,8 +2148,11 @@
                                 {
                                     return d.deaths;
                                 }
-                                else{
+                                else if(currentvis=="recovered"){
                                     return d.recovered;
+                                }
+                                else{
+                                  return d.active;
                                 }
                                  })])
               .range([height, 0]);
@@ -2041,6 +2196,7 @@
               if(currentvis=="confirm")return "#2a5599";
               else if(currentvis=="death")return '#cb181d';//'#005a32''#99000d'  '#cb181d''#238b45'
               else if(currentvis=="recovered") return '#238b45';
+              else if(currentvis=='active')return "orange";
             })                                         //"#2a5599"
             .attr("x", function (d) { return xscale(d.region); })
             .attr("y", function (d) { 
@@ -2052,8 +2208,11 @@
                                 {
                                     return yscale(d.deaths);
                                 }
-                                else{
+                                else if(currentvis=="recovered"){
                                     return yscale(d.recovered);
+                                }
+                                else{
+                                  return yscale(d.active);
                                 }
                  })
             .attr("width", xscale.bandwidth())
@@ -2066,8 +2225,11 @@
                                 {
                                     return height - yscale(d.deaths);
                                 }
-                                else{
+                                else if(currentvis=="recovered"){
                                     return height - yscale(d.recovered);
+                                }
+                                else if(currentvis=="active"){
+                                  return height - yscale(d.active)
                                 }
                  })
                  .on("mouseenter", function(d) {
@@ -2104,6 +2266,7 @@
               if(currentvis=="confirm")return "#2a5599";
               else if(currentvis=="death")return '#cb181d';//'#005a32''#99000d'  '#cb181d''#238b45'
               else if(currentvis=="recovered") return '#238b45';
+              else if(currentvis=="active")return "orange";
             })   
                 div
                 .attr("class","tooltip")
@@ -2113,7 +2276,27 @@
               })
             .on("click", d=>{
                 //console.log(d.country);
-        //          myScript1(d.country);
+                l=d3.selectAll('rect')._groups[0]
+                ln=d3.selectAll('rect')._groups[0].length
+                for(let i=0;i<ln-115;i++)
+                {
+                  if(l[i].__data__.region==d.region)
+                  {
+                    d3.select(l[i]).classed('selected',true);
+                  }
+                  else{
+                    d3.select(l[i]).classed('selected',false);
+
+                  }
+                }
+                let c=[]
+                c.push(d)
+                 myScript1(d.region);
+                 total_case_print(c)
+                 total_case_print1(c)
+                 total_case_print2(c)
+                 total_case_print3(c)
+                 
         //        // drawline(d.country, store.coronadat)
   
         //        for ( s of store.time){
@@ -2185,7 +2368,7 @@
         total_case_print(d)
         total_case_print1(d)
         total_case_print2(d)
-  
+        total_case_print3(d)
         store.afterlasso=d
         
        l= d3.select("#G").selectAll("path")._groups[0]
@@ -2404,7 +2587,7 @@
               })
             .on("click", d=>{
                 //console.log(d.country);
-                 myScript1(d.country);
+                 myScript1(d.region);
                  for ( s of store.time){
            if( s.key == d.country){ linedata = s; break}
          }
@@ -2555,12 +2738,29 @@
   document.getElementById("body2").innerHTML="";
   let height = 450;
   let width = 530;
-  data.map(d=> {
+  data.map(function(d){
    d.date= new Date(d.date)
-   d.confirmed = +d.confirmed
+   if(currentvis=="confirm")  d.confirmed = +d.confirmed;
+   else if(currentvis=="death")  d.deaths =+d.deaths;
+   else if(currentvis=="recovered") d.recovered =+d.recovered;
+   else if(currentvis=="active")d.active =+d.active;
   })
-  let max = d3.max(data,d=>d.confirmed)
-  let barmax = d3.max(data,d=>d.new_case)
+  
+  let max = d3.max(data,function(d)
+  {
+    if(currentvis=="confirm")return d.confirmed;
+    else if(currentvis=="death") return d.deaths;
+    else if(currentvis=="recovered")return d.recovered;
+    else if(currentvis=="active")return d.active;
+  })
+  //else if(currentvis=="death")let max = d3.max(data,d=>d.deaths)
+  let barmax = d3.max(data,function(d){
+    if(currentvis=="confirm")return d.new_case;
+    else if(currentvis=="death") return d.new_death_case;
+    else if(currentvis=="recovered")return d.new_recovered_case;
+    else if(currentvis=="active")return d.new_active_case;
+
+  })
   let Yscale = d3.scaleLinear()
   .domain([0,barmax])
   .range([height,0])
@@ -2594,20 +2794,43 @@
   
   var valueline = d3.line()
   .x(d => xscale(d.date))
-  .y(d => yscale(d.confirmed))
-  .defined(d => !!d.confirmed)
+  .y(function(d){
+    if(currentvis=="confirm") return yscale(d.confirmed);
+    else if(currentvis=="death") return yscale(d.deaths);
+    else if(currentvis=="recovered")return yscale(d.recovered);
+    else if(currentvis=="active")return yscale(d.active);
+  })
+  .defined(function(d){
+    if(currentvis=="confirm") return !!d.confirmed;
+    else if(currentvis=="death") return !!d.deaths;
+    else if(currentvis=="recovered")return !!d.recovered;
+    else if(currentvis=="active")return !!d.active;
+  })
   //for tooltip
      // bar chart here
      body.selectAll(".bar")
     .data(data)
   .enter().append("rect")
-    .attr("fill", "teal")
+    .attr("fill", function()
+    {
+      return "#00abab";
+    })
     .attr("class", "bar")
     .style("margin-top", "10px")
     .attr("x", function(d) { return xscale(d.date); })
     .attr("width", "4px")
-    .attr("y", function(d) { return Yscale(d.new_case); })
-    .attr("height", function(d) { return height - Yscale(d.new_case)});
+    .attr("y", function(d) {
+      if(currentvis=="confirm") return Yscale(d.new_case);
+    else if(currentvis=="death") return Yscale(d.new_death_case);
+    else if(currentvis=="recovered")return Yscale(d.new_recovered_case);
+    else if(currentvis=="active")return Yscale(d.new_active_case);
+   })
+    .attr("height", function(d) { 
+      if(currentvis=="confirm") return height - Yscale(d.new_case);
+    else if(currentvis=="death") return height - Yscale(d.new_death_case);
+    else if(currentvis=="recovered")return height - Yscale(d.new_recovered_case);
+    else if(currentvis=="active")return height - Yscale(d.new_active_case);
+    });
     //end
             
   body.append('rect')
@@ -2622,24 +2845,25 @@
   .append("path")
   .datum(data)
   .attr("fill", "none")
-  .attr("stroke", "#2a5599")
+  .attr("stroke", function()
+  {
+    if(currentvis=="confirm") return "#2a5599";
+    else if(currentvis=="death") return '#cb181d';
+    else if(currentvis=="recovered")return '#238b45';
+    else if(currentvis=="active")return 'orange';
+  })
   .attr("stroke-width", 3)
   .attr("d", valueline)
   .attr("class", "line")
-  .classed("selectedL",function (d) { 
-    if(currentvis == "confirm"){ return false;}
-    else{ return true; }
-  
-    })//here we
   .on("mouseenter", d=>{
               
-        showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
+        showtool([d3.event.clientX -180, d3.event.clientY-30])
       })
   .on("mouseleave", d=>{
         d3.select("#tooltip").style('display', 'none')
       })
     .on("mousemove", d=>{
-        showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
+        showtool([d3.event.clientX -180, d3.event.clientY-30])
       })
   
   //draw line end 
@@ -2658,22 +2882,30 @@
           
   }
   
-  function showtool(check, coord){
+  function showtool(coord){
    var val
    var cas
-   if(check == 1){
-      val = a.confirmed
-      cas = "Confirmed: "
+
+   if(currentvis=="confirm") {
+    val = a.confirmed
+    cas = "Confirmed: "
    }
-   else if(check==2){
-      val = a.recovered
-      cas = "Recovered: "
-  
-   }
-   else{
-      val = a.deaths
+    else if(currentvis=="death")
+    {
+          val = a.deaths
       cas = "Deaths: "
-   }
+    }
+    else if(currentvis=="recovered")
+    {
+    val = a.recovered
+      cas = "Recovered: "
+    }
+    else if(currentvis=="active")
+    {
+    val = a.active
+      cas = "Active: "
+    }
+
     var formatDate = d3.timeFormat("%d-%b-%y")
   
     
@@ -2687,75 +2919,10 @@
               
       }
        
-  //end tooltip
-  
-  //recovered case
-  var valuerc = d3.line()
-  .x(d => xscale(d.date))
-  .y(d => yscale(d.recovered))
-  .defined(d => !!d.recovered)
-  
-  body
-  .append("path")
-  .datum(data)
-  .attr("fill", "none")
-  .attr("stroke", '#238b45')
-  .attr("stroke-width", 3)
-  .attr("d", valuerc)
-  .attr("class", "line")
-  .classed("selectedL",function (d) { 
-    if(currentvis == "recovered"){ return false;}
-    else{ return true; }
-    
-  
-    })
-  .on("mouseenter", d=>{
-              
-        showtool(2,[d3.event.clientX -180, d3.event.clientY-30])
-      })
-  .on("mouseleave", d=>{
-        d3.select("#tooltip").style('display', 'none')
-      })
-    .on("mousemove", d=>{
-        showtool(2,[d3.event.clientX -180, d3.event.clientY-30])
-      })
-  // end recov
-  
-  //draw deaths
-  var valuedth = d3.line()
-  .x(d => xscale(d.date))
-  .y(d => yscale(d.deaths))
-  .defined(d => !!d.deaths)
-  
-  body
-  .append("path")
-  .datum(data)
-  .attr("fill", "none")
-  .attr("stroke", '#cb181d')
-  .attr("stroke-width", 3)
-  .attr("d", valuedth)
-  .attr("class", "line")
-  .classed("selectedL",function (d) {
-    if(currentvis == "death"){ return false;}
-    else{ return true; }
-    
-  
-    })
-  .on("mouseenter", d=>{
-              
-        showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
-      })
-  .on("mouseleave", d=>{
-        d3.select("#tooltip").style('display', 'none')
-      })
-    .on("mousemove", d=>{
-        showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
-      })
-  //end deaths
-  // legend
+
   var columnHeaders = ["New cases","Deaths", "Recovered", "Confirmed"];
   var color = d3.scaleOrdinal().range(
-    ["#2a5599" ,'#238b45','#cb181d',"teal"]);
+    ["#2a5599" ,'#238b45','#cb181d',"#00abab"]);
   
     var legend = body.selectAll(".legend")
       .data(columnHeaders.slice().reverse())
@@ -2790,30 +2957,42 @@
       .enter()
       .append("circle")
         .attr("cx", function (d) { return xscale(d.date); } )
-        .attr("cy", function (d) { return yscale(d.confirmed); } )
-        .attr("case", "confirm")
-        .attr("r", 0)
-        .style("fill", "red")//#69b3a2
-        body.append('g')
-      .selectAll("dot")
-      .data(data)
-      .enter()
-      .append("circle")
-        .attr("cx", function (d) { return xscale(d.date); } )
-        .attr("cy", function (d) { return yscale(d.recovered); } )
-        .attr("case", "recovered")
-        .attr("r", 0)
-        .style("fill", "red")//#69b3a2
-        body.append('g')
-      .selectAll("dot")
-      .data(data)
-      .enter()
-      .append("circle")
-        .attr("cx", function (d) { return xscale(d.date); } )
-        .attr("cy", function (d) { return yscale(d.deaths); } )
-        .attr("case", "death")
-        .attr("r", 0)
-        .style("fill", "red")//#69b3a2
+        .attr("cy", function (d) { 
+          if(currentvis=="confirm") return yscale(d.confirmed);
+    else if(currentvis=="death") return yscale(d.deaths);
+    else if(currentvis=="recovered")return yscale(d.recovered);
+    else if(currentvis=="active")return yscale(d.active);
+           } )
+        .attr("case", function()
+        {
+          if(currentvis=="confirm") return "confirm";
+    else if(currentvis=="death")return "death";
+    else if(currentvis=="recovered")return "recovered";
+    else if(currentvis=="active")return "active";
+        })
+        .classed('selected1',true)
+        .attr("r", 2.5)
+        .style("fill", "white")//#69b3a2
+      //   body.append('g')
+      // .selectAll("dot")
+      // .data(data)
+      // .enter()
+      // .append("circle")
+      //   .attr("cx", function (d) { return xscale(d.date); } )
+      //   .attr("cy", function (d) { return yscale(d.recovered); } )
+      //   .attr("case", "recovered")
+      //   .attr("r", 0)
+      //   .style("fill", "red")//#69b3a2
+      //   body.append('g')
+      // .selectAll("dot")
+      // .data(data)
+      // .enter()
+      // .append("circle")
+      //   .attr("cx", function (d) { return xscale(d.date); } )
+      //   .attr("cy", function (d) { return yscale(d.deaths); } )
+      //   .attr("case", "death")
+      //   .attr("r", 0)
+      //   .style("fill", "red")//#69b3a2
   lasso(yscale(1), data, xscale)
   
   
@@ -2968,10 +3147,12 @@
             let c=0;
             let d=0;
             let r=0;
+            let k=0;
             
                c += x.values[end].confirmed - x.values[str].confirmed
                d += x.values[end].deaths - x.values[str].deaths
                r += x.values[end].recovered - x.values[str].recovered
+               k += x.values[end].active - x.values[str].active
             
             a[j] = {
               "country" : x.values[0].country,
@@ -2979,7 +3160,8 @@
               "confirmed" : c,
               "recovered" : r,
               "deaths" : d,
-              "date" :   x.values[end].date       }
+              "date" :   x.values[end].date,
+               "active" : k      }
             j++;
           }
           
@@ -2987,6 +3169,7 @@
           if(currentvis=="confirm")a = a.sort((a,b)=>b.confirmed-a.confirmed);
           else if(currentvis=="death")a = a.sort((a,b)=>b.deaths - a.deaths);
           else if(currentvis=="recovered")a = a.sort((a,b)=>b.recovered -a.recovered)
+          else if(currentvis=="active")a = a.sort((a,b)=>b.active -a.active)
           
   
   
@@ -3003,7 +3186,8 @@
                         j.confirmed=a[i].confirmed;
                         j.deaths=a[i].deaths;
                         j.recovered=a[i].recovered;
-                        j.country=a[i].country
+                        j.country=a[i].country;
+                        j.active=a[i].active;
                         break;
                     }
                     else {
@@ -3021,12 +3205,15 @@
                     i.confirmed=0;
                     i.deaths=0
                     i.recovered=0
+                    i.active=0
                 }
             }
   
             total_case_print(a);
             total_case_print1(a);
             total_case_print2(a);
+            total_case_print3(a);
+            console.log(a)
             
             clearmap()
             drawMap(store.mapafterlinelasso)
