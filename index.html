@@ -313,12 +313,6 @@
     text-decoration: none;
     cursor: pointer;
   }
-  #stack {
-    margin-top: 60px;
-    margin-left: -60px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-}
   
       
   
@@ -398,7 +392,7 @@
             
     
         </div>
-        <div id="stack" style="transform: rotate(90deg)" >
+        <div id="stack">
 
         </div>
         
@@ -3000,26 +2994,7 @@
         .classed('selected1',true)
         .attr("r", 2.5)
         .style("fill", "white")//#69b3a2
-      //   body.append('g')
-      // .selectAll("dot")
-      // .data(data)
-      // .enter()
-      // .append("circle")
-      //   .attr("cx", function (d) { return xscale(d.date); } )
-      //   .attr("cy", function (d) { return yscale(d.recovered); } )
-      //   .attr("case", "recovered")
-      //   .attr("r", 0)
-      //   .style("fill", "red")//#69b3a2
-      //   body.append('g')
-      // .selectAll("dot")
-      // .data(data)
-      // .enter()
-      // .append("circle")
-      //   .attr("cx", function (d) { return xscale(d.date); } )
-      //   .attr("cy", function (d) { return yscale(d.deaths); } )
-      //   .attr("case", "death")
-      //   .attr("r", 0)
-      //   .style("fill", "red")//#69b3a2
+ 
   lasso(yscale(1), data, xscale)
   
   
@@ -3038,8 +3013,9 @@
     // Lasso functions
           var lasso_start = function() {
               lasso.items()
-                  .attr("r",0) // reset size
+                  .attr("r",2.5) // reset size
                   .classed("not_possible",true)
+                  .style("fill", "white")
                   .classed("selected",false);
           };
   
@@ -3073,7 +3049,7 @@
               // Style the selected dots
               fcircle
                   .classed("selected",true)
-                  .attr("r",2.5)
+                  .attr("r",3.5)
                   .style("fill", "yellow");
                   var lassod = fcircle._groups[0]
                   var bisect = d3.bisector(function(d) { return d.date; }).left;
@@ -3099,7 +3075,7 @@
                   }
               // Reset the style of the not selected dots
               lasso.notSelectedItems()
-                  .attr("r",0);
+                  .attr("r",2.5);
   
             //console.log(lasso.selectedItems());
   
