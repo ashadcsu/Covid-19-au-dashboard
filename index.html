@@ -3329,7 +3329,7 @@
            ++i;
       }
       i=0;
-        console.log(pdata[0])
+        
         for( x of pdata[0]){
           finald[i] = {
               "confirmed" : x.confirmed,
@@ -3345,7 +3345,7 @@
           ++i;
         }
 
-        //console.log(finald)
+        // console.log(finald)
   
         for( var k =1; k< pdata.length; ++k){
           let j=0;
@@ -3354,15 +3354,15 @@
             finald[j].recovered += x.recovered;
             finald[j].deaths += x.deaths
             finald[j].active += x.active;
-            finald[j].new_case +=x.new_case;
-            finald[j].new_death_case +=x.new_death_case;
-            finald[j].new_recovered_case +=x.new_recovered_case;
-            finald[j].new_active_case += x.new_active_case;
+            finald[j].new_case +=x.new;
+            finald[j].new_death_case +=x.new_death;
+            finald[j].new_recovered_case +=x.new_recovered;
+            finald[j].new_active_case += x.new_active;
             ++j;
           }
         }
 
-        //console.log(finald)
+        console.log(finald)
         
         drawline(finald)
       }
