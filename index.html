@@ -313,6 +313,11 @@
     text-decoration: none;
     cursor: pointer;
   }
+  #stack {
+    margin-top: -50px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+}
   
       
   
@@ -361,7 +366,7 @@
                   </div>
                   <div>
                       <label for="amount">Date range:</label>
-                      <input type="text" id="amount" style="border: 0; color: blue; font-weight: bold;" size="30"/>     
+                      <input type="text" id="amount" style="border: 0; color: blue; font-weight: bold; background-color: #DCDCDC;" size="30"/>     
                     <div id="slider-range"></div>
                   </div>
         </div>
@@ -900,9 +905,9 @@
         total_case_print2(d)
         total_case_print3(d)
   
-        l= d3.selectAll("rect")._groups[0]
-        ln=d3.selectAll("rect")._groups[0].length
-       for(i=0;i<ln-116;i++)
+        l=d3.select("#BarChart").selectAll('rect')._groups[0]
+        ln=d3.select("#BarChart").selectAll('rect')._groups[0].length
+       for(i=0;i<ln;i++)
        {
          if(dn.includes(l[i].__data__.region))
          {
@@ -1797,63 +1802,57 @@
            if(c=="All")d3.select(".res").text("Showing Results for All Countries");
            else d3.select(".res").text("Showing Results for "+c);
           
-           l=d3.selectAll("rect")._groups[0];
-           ln=d3.selectAll("rect")._groups[0].length;
-           for(j=0;j<ln;j++)
-            {
-            
-              
-              d3.select(l[i]).classed("selected1",false)
-                    d3.select(l[i]).classed("selected",false);
-                    
-              
-              
-            }
-            l=d3.select("#G").selectAll("path")._groups[0]
-            ln=d3.select("#G").selectAll("path")._groups[0].length
-            for(i=0;i<ln;i++)
+          let d=[]
+        l=d3.select("#BarChart").selectAll('rect')._groups[0]
+        ln=d3.select("#BarChart").selectAll('rect')._groups[0].length
+        for(let i=0;i<ln;i++)
         {
           
-          d3.select(l[i]).classed("selected",false);
-          d3.select(l[i]).classed("selected1",false)
+          if(l[i].__data__.region==c)
+          {
+            d3.select(l[i]).classed("selected",true);
+            d.push(l[i].__data__)
+          }
+          else{
+            d3.select(l[i]).classed("selected",false);
+
+          }
+          
         }
-            
-           if(c=="All")
-           {
-            
-         drawline(store.sumdate)
-            total_case_print(store.done)
-          total_case_print1(store.done)
-          total_case_print2(store.done)
-          for(j=0;j<205;j++)
+
+        l=d3.select("#G").selectAll("path")._groups[0]
+            ln=d3.select("#G").selectAll("path")._groups[0].length
+            for(let i=0;i<ln-3;i++)
             {
-              i=d3.selectAll("rect")._groups[0][j];
-              d3.select(i).classed("selected",false);
-              d3.select(i).classed("selected1",false)
+              if(l[i].__data__.properties.STATE_NAME==c)
+              {
+                d3.select(l[i]).classed("selected",true);
+              }
+              else{
+                d3.select(l[i]).classed("selected",false);
+
+              }
+              
             }
 
-           }
+          if(d.length!=0){
+            total_case_print(d)
+            total_case_print1(d)
+            total_case_print2(d)
+            total_case_print3(d)
+          }
+          else{
+            total_case_print(store.done)
+            total_case_print1(store.done)
+            total_case_print2(store.done)
+            total_case_print3(store.done)
+            
+          }
 
-           l= d3.selectAll("rect")._groups[0]
-        ln=d3.selectAll("rect")._groups[0].length
-       for(i=0;i<ln-115;i++)
-       {
-         if(l[i].__data__.region==c)
-         {
-           d3.select(l[i]).classed("selected",true)
-         }
-         else{
-           d3.select(l[i]).classed("selected",false)
-         }
-       }
-            l=d3.select("#G").selectAll("path")._groups[0]
-            ln=d3.select("#G").selectAll("path")._groups[0].length
-            for(i=0;i<ln-3;i++)
-        {
-          if(l[i].__data__.properties.STATE_NAME==c){
-                    d3.select(l[i]).classed("selected",true);
-              }
-        }
+        
+        
+            
+  
            
             
   
@@ -1869,7 +1868,7 @@
             
             l=d3.select("#G").selectAll("path")._groups[0]
             ln=d3.select("#G").selectAll("path")._groups[0].length
-            for(let i=0;i<ln-4;i++)
+            for(let i=0;i<ln-3;i++)
             {
               if(l[i].__data__.properties.STATE_NAME==c)
               {
@@ -1890,9 +1889,9 @@
         let c=e
         
             
-        l=d3.selectAll("rect")._groups[0]
-        ln=d3.selectAll("rect")._groups[0].length
-        for(let i=0;i<ln-116;i++)
+        l=d3.select("#BarChart").selectAll('rect')._groups[0]
+        ln=d3.select("#BarChart").selectAll('rect')._groups[0].length
+        for(let i=0;i<ln;i++)
         {
           if(l[i].__data__.region==c)
           {
@@ -2015,7 +2014,7 @@
         d=i.date;
             }
             d3.select(".tc3").html(
-                "<span style='font-weight:bold;font-size:1.5em;color: orange'>"+cf+"</span>"+
+                "<span style='font-weight:bold;font-size:1.5em;color: #db920d'>"+cf+"</span>"+
   "</br>"+"Active Cases"
                 )
             
@@ -2028,7 +2027,7 @@
         d=i.date;
             }
             d3.select(".tc3").html(
-                "<span style='font-weight:bold;font-size:1.5em;color: orange'>"+cf+"</span>"+
+                "<span style='font-weight:bold;font-size:1.5em;color: #db920d'>"+cf+"</span>"+
   "</br>"+"Active Cases"
                 )
             
@@ -2287,9 +2286,9 @@
               })
             .on("click", d=>{
                 //console.log(d.country);
-                l=d3.selectAll('rect')._groups[0]
-                ln=d3.selectAll('rect')._groups[0].length
-                for(let i=0;i<ln-116;i++)
+                l=d3.select("#BarChart").selectAll('rect')._groups[0]
+        ln=d3.select("#BarChart").selectAll('rect')._groups[0].length
+                for(let i=0;i<ln;i++)
                 {
                   if(l[i].__data__.region==d.region)
                   {
@@ -2387,7 +2386,7 @@
         
        l= d3.select("#G").selectAll("path")._groups[0]
        ln=d3.select("#G").selectAll("path")._groups[0].length
-       for(i=0;i<ln-4;i++)
+       for(i=0;i<ln-3;i++)
        {
          console.log(l[i].__data__)
          if(dn.includes(l[i].__data__.properties.STATE_NAME))
