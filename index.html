@@ -1117,7 +1117,7 @@
           }
             else{
               byRegion[i].values[j].new_recovered=byRegion[i].values[j].recovered  - byRegion[i].values[j-1].recovered;
-              byRegion[i].values[j].new_active=byRegion[i].values[j].active - byRegion[i].values[j-1].active;
+              byRegion[i].values[j].new_active=Math.abs(byRegion[i].values[j].active - byRegion[i].values[j-1].active)
             }
           }
         }
