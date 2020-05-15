@@ -2407,7 +2407,11 @@
          })
        }
        
-       if(d.length>0)afterbarlasso(g);
+       if(d.length>0)
+       {
+         afterbarlasso(g);
+       
+         }
        if(d.length==0) drawline(store.sumdate)
       //  if(store.currentcommand!=null)
       //    {
@@ -2827,6 +2831,8 @@
     else if(currentvis=="active")return !!d.active;
   })
   //for tooltip
+  //console.log("bardata")
+  //console.log(data)
      // bar chart here
      body.selectAll(".bar")
     .data(data)
@@ -3308,7 +3314,6 @@
      // after bar lasso
   
       function afterbarlasso(data){
-        console.log("asci")
         var pdata = []
         var finald = []
         let i = 0;
@@ -3324,7 +3329,7 @@
            ++i;
       }
       i=0;
-        //console.log(pdata)
+        console.log(pdata[0])
         for( x of pdata[0]){
           finald[i] = {
               "confirmed" : x.confirmed,
@@ -3357,7 +3362,7 @@
           }
         }
 
-        console.log(finald)
+        //console.log(finald)
         
         drawline(finald)
       }
@@ -3464,7 +3469,7 @@
   // stack bar
 
   function drawstackbar(data){
-    console.log(data)
+  
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 660 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
