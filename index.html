@@ -313,11 +313,7 @@
     text-decoration: none;
     cursor: pointer;
   }
-  #stack {
-    margin-top: -50px;
-    margin-right: 0px;
-    margin-bottom: 0px;
-}
+
   
       
   
@@ -397,7 +393,7 @@
             
     
         </div>
-        <div id="stack">
+        <div id="stack" style="transform: rotate(90deg)">
 
         </div>
         
@@ -3471,8 +3467,8 @@
   function drawstackbar(data){
   
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 660 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = 500 - margin.left - margin.right,
+    height = 380 - margin.top - margin.bottom;
  
 var x0 = d3.scaleBand().range([0, width]);
  
@@ -3491,9 +3487,9 @@ var yAxis = d3.axisLeft()
 var color = d3.scaleOrdinal().range(
     ["orange", "#cb181d", "#238b45"]);
  
-var svg = d3.select("#stack").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+var svg = d3.select("#BarChart")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom )
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
  
