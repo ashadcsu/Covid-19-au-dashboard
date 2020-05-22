@@ -3707,6 +3707,10 @@ function showtool(check, coord){
     cas = "Recovered: "
 
  }
+ else if(check == 4){
+   val = a.active
+   cas = "Active:"
+ }
  else{
     val = a.deaths
     cas = "Deaths: "
@@ -3776,11 +3780,37 @@ body
   .on("mousemove", d=>{
       showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
     })
-//end deaths
+//end death
+   // active case
+   var valueac = d3.line()
+.x(d => xscale(d.date))
+.y(d => yscale(d.active))
+.defined(d => !!d.active)
+
+body
+.append("path")
+.datum(data)
+.attr("fill", "none")
+.attr("stroke", 'steelblue')
+.attr("stroke-width", 3)
+.attr("d", valueac)
+.attr("class", "line")
+.on("mouseenter", d=>{
+            
+      showtool(4,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+.on("mouseleave", d=>{
+      d3.select("#tooltip").style('display', 'none')
+    })
+  .on("mousemove", d=>{
+      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+   //end active  
+
 // legend
-var columnHeaders = ["Deaths", "Recovered", "Confirmed"];
+var columnHeaders = ["Active","Deaths", "Recovered", "Confirmed"];
 var color = d3.scaleOrdinal().range(
-  ["#2a5599" ,'#238b45','#cb181d']);
+  ["#2a5599" ,'#238b45','#cb181d',"steelblue"]);
 
   var legend = body.selectAll(".legend")
     .data(columnHeaders.slice().reverse())
