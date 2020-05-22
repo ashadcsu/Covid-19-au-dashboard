@@ -348,6 +348,7 @@
                         <option value="Death Cases">Death Cases</option>
                         <option value="Recovered Cases">Recovered Cases</option>
                         <option value="Active Cases">Active Cases</option>
+                        <option value="All Cases">All Cases</option>
                         <!-- <option value="New Cases">New Cases</option> -->
                       </select>
                     </form>
@@ -2038,7 +2039,11 @@
             //console.log("hello")
             //drawCirclesdeath(groupbyCountryDeath(store.death),"#ff9500")
             //drawCircles(groupbyCountryDeath(store.death),)
-            if(selectedValue=="Death Cases"){
+            if(selectedValue=="All Cases")
+            {
+              //akane call koris stack bar
+            }
+            else if(selectedValue=="Death Cases"){
               currentvis="death";
             document.getElementById("countries").value="All";
             $("#countries").trigger("chosen:updated");
