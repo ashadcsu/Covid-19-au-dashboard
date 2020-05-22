@@ -527,7 +527,7 @@
           total_case_print1(store.done)
           total_case_print2(store.done)
           total_case_print3(store.done)
-          drawstackbar(store.done)
+          
           
           
         
@@ -2041,7 +2041,10 @@
             //drawCircles(groupbyCountryDeath(store.death),)
             if(selectedValue=="All Cases")
             {
-              //akane call koris stack bar
+              d3.select("#BarChart").remove()
+              d3.select("#Bar").append("svg").attr("id","BarChart").attr("transform", "rotate(90)")
+              drawstackbar(store.done)
+              drawAlline(store.sumdate)
             }
             else if(selectedValue=="Death Cases"){
               currentvis="death";
@@ -2783,7 +2786,7 @@
     if(currentvis=="confirm")return d.new_case;
     else if(currentvis=="death") return d.new_death_case;
     else if(currentvis=="recovered")return d.new_recovered_case;
-    else if(currentvis=="active")return d.new_active_case;
+    else if(currentvis=="active")return d.new_active_case; 
 
   })
   let Yscale = d3.scaleLinear()
@@ -3596,6 +3599,252 @@ var innerColumns = {
 
 }
   //end bar
+
+// all line together
+function drawAlline(data){
+
+// draw line here
+
+let body = d3.select("#body2")
+document.getElementById("body2").innerHTML="";
+let height = 400;
+let width = 430;
+data.map(d=> {
+ d.date= new Date(d.date)
+ d.confirmed = +d.confirmed
+})
+let max = d3.max(data,d=>d.confirmed)
+let yscale = d3.scaleLinear()
+.domain([0,max])
+.range([height,0])
+body.append("g")
+.call(d3.axisLeft(yscale)
+        .ticks(15)
+        .tickFormat(d3.format(".02s")));
+
+        body.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -55)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Cumulative Cases"); 
+
+
+let xscale = d3.scaleTime()
+.domain(d3.extent(data,d=>d.date))
+.range([0,width])
+body.append("g")
+.attr("transform", "translate(0,"+height+")")
+.call(d3.axisBottom(xscale)
+.tickFormat(d3.timeFormat("%d %b")))
+.selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-65)" );
+
+var valueline = d3.line()
+.x(d => xscale(d.date))
+.y(d => yscale(d.confirmed))
+.defined(d => !!d.confirmed)
+
+//for tooltip
+
+          
+body.append('rect')
+    .style("fill", "none")
+    .style("pointer-events", "all")
+    .attr('width', width)
+    .attr('height', height)
+    .on('mousemove', mousemove);
+
+//tool tip
+body
+.append("path")
+.datum(data)
+.attr("fill", "none")
+.attr("stroke", "#2a5599")
+.attr("stroke-width", 3)
+.attr("d", valueline)
+.attr("class", "line")
+.on("mouseenter", d=>{
+            
+      showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+.on("mouseleave", d=>{
+      d3.select("#tooltip").style('display', 'none')
+    })
+  .on("mousemove", d=>{
+      showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+
+//draw line end 
+
+/// for tooltip
+
+var bisect = d3.bisector(function(d) { return d.date; }).left;
+function mousemove() {
+        // recover coordinate we need
+        var x0 = xscale.invert(d3.mouse(this)[0]);
+        var i = bisect(data, x0, 1);
+        selectedData = data[i]
+        a= selectedData
+
+       
+        
+}
+
+function showtool(check, coord){
+ var val
+ var cas
+ if(check == 1){
+    val = a.confirmed
+    cas = "Confirmed: "
+ }
+ else if(check==2){
+    val = a.recovered
+    cas = "Recovered: "
+
+ }
+ else{
+    val = a.deaths
+    cas = "Deaths: "
+ }
+  var formatDate = d3.timeFormat("%d-%b-%y")
+
+  
+
+        d3.select("#tooltip")
+            .html(cas+val+"<br> Date: "+ formatDate(a.date))
+            .style('top', coord[1]-15+"px")
+            .style("left", coord[0]+15+"px")
+            .style("display", "block")
+            .style("color", "blue")
+            
+    }
+     
+//end tooltip
+
+//recovered case
+var valuerc = d3.line()
+.x(d => xscale(d.date))
+.y(d => yscale(d.recovered))
+.defined(d => !!d.recovered)
+
+body
+.append("path")
+.datum(data)
+.attr("fill", "none")
+.attr("stroke", '#238b45')
+.attr("stroke-width", 3)
+.attr("d", valuerc)
+.attr("class", "line")
+.on("mouseenter", d=>{
+            
+      showtool(2,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+.on("mouseleave", d=>{
+      d3.select("#tooltip").style('display', 'none')
+    })
+  .on("mousemove", d=>{
+      showtool(2,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+// end recov
+
+//draw deaths
+var valuedth = d3.line()
+.x(d => xscale(d.date))
+.y(d => yscale(d.deaths))
+.defined(d => !!d.deaths)
+
+body
+.append("path")
+.datum(data)
+.attr("fill", "none")
+.attr("stroke", '#cb181d')
+.attr("stroke-width", 3)
+.attr("d", valuedth)
+.attr("class", "line")
+.on("mouseenter", d=>{
+            
+      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+.on("mouseleave", d=>{
+      d3.select("#tooltip").style('display', 'none')
+    })
+  .on("mousemove", d=>{
+      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
+    })
+//end deaths
+// legend
+var columnHeaders = ["Deaths", "Recovered", "Confirmed"];
+var color = d3.scaleOrdinal().range(
+  ["#2a5599" ,'#238b45','#cb181d']);
+
+  var legend = body.selectAll(".legend")
+    .data(columnHeaders.slice().reverse())
+  .enter().append("g")
+    .attr("class", "legend")
+    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+legend.append("rect")
+    .attr("x", 105)
+    .attr("width", 18)
+    .attr("height", 18)
+    .style("fill", color);
+
+legend.append("text")
+    .attr("x", 90)
+    .attr("y", 5)
+    .attr("dy", ".35em")
+    .style("fill", color)
+    .style("text-anchor", "end")
+    .text(function(d) { return d; });
+
+//
+
+
+//console.log(data)
+
+
+
+body.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return xscale(d.date); } )
+      .attr("cy", function (d) { return yscale(d.confirmed); } )
+      .attr("case", "confirm")
+      .attr("r", 0)
+      .style("fill", "red")//#69b3a2
+      body.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return xscale(d.date); } )
+      .attr("cy", function (d) { return yscale(d.recovered); } )
+      .attr("case", "recovered")
+      .attr("r", 0)
+      .style("fill", "red")//#69b3a2
+      body.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return xscale(d.date); } )
+      .attr("cy", function (d) { return yscale(d.deaths); } )
+      .attr("case", "death")
+      .attr("r", 0)
+      .style("fill", "red")//#69b3a2
+lasso(yscale(1), data, xscale)
+
+
+}
+
+//end line
 
         </script>
     </html>
