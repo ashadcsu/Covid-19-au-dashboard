@@ -275,44 +275,89 @@ div.tooltip1{
          margin: 15px;
     }
 
-    /* The Modal (background) */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
 
-/* Modal Content */
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 40%;
-}
-
-/* The Close Button */
-.close {
-  color: #aaaaaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
-}
+      /* The Modal (background) */
+      .modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 3; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow-y: scroll; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .round{
+    width: 40%;
+      border-radius: 15px;
+      border: 1px #000 solid;
+      padding: 5px 5px 5px 25px;
+      position: absolute;
+      height: 30px;
+      font-size: 18px;
+      
+  
+  }
+  
+  input:focus::placeholder {
+    color: transparent;
+  }
+  
+  #search{
+    position: absolute;
+    margin-top: 7px;
+    left: 35px;
+  }
+  
+  #button{
+    position: absolute;
+    margin-top: 7px;
+    left: 40%;
+  }
+  
+  #mybtn{
+    margin-left: 45%;
+    position: absolute;
+    color: #2a5599;
+  }
+  
+  body {font-family: Arial, Helvetica, sans-serif;}
+    h4{
+      color: white;
+    }
+  
+  #reset{
+    margin-left: 41%;
+    position: absolute;
+  }
 
 
     
@@ -322,11 +367,12 @@ div.tooltip1{
       <script src="d3.js"></script>
       <title>COVID-19 Dashboard</title>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
 
@@ -334,6 +380,53 @@ div.tooltip1{
   
   <body>
       <h1>COVID-19 in Australia</h1>
+
+      <div id="myModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content" style="background-color: #2a6592; color:rgb(209, 178, 178);">
+          <span class="close">&times;</span>
+          <p style="color: white; font-weight: 1em; font-size: 16px; letter-spacing: .3em; ">
+            
+            <h4>1. To select a single country.</h4> 
+              --> select "Bangladesh"
+            <h4>2. To select multiple countries.</h4>
+            --> select "China","USA",..
+            <h4>3. To choose a particular case.</h4>
+              --> select/show death/recovered/confirmed cases
+            <h4>4. To find minimum/maximum death/recovered/confirmed cases.</h4>
+              --> find maximum/minimum death/recovered/confirmed cases
+            <h4>5. To select a particular date range.</h4>
+            --> from m/d/y to m/d/y
+            <h4>6. To find minimum/maximum death/recovered/confirmed cases among some selected countries.</h4>
+            --> first select some countries by using lasso/select command then use the find maximum command
+            <h4>7. To find minimum/maximum death/recovered/confirmed cases in particular date range.</h4>
+            --> first select a date range by using lasso/slider/from to command then use the find maximum command
+            <h4>8. To reset or clear the window.</h4>
+            --> cls/clear/clear all
+          
+          </p>
+        </div>
+      
+      </div>
+
+      <div class="result">
+          
+        <div>
+        <input type="text" id="command"  placeholder="type 'select us,china'" class="round">
+        <i class="fa fa-search" id="search" aria-hidden="true" onclick="command()" ></i>
+        <i class="fa fa-microphone"  id="button" aria-hidden="true"></i>
+        <!-- <input type="image" id="button" src="image.png" width="20" height="20"> -->
+        <!-- <!-- <button onclick="command()">Enter</button> -->
+        <i class="fa fa-question-circle fa-2x" aria-hidden="true" id="myBtn"></i>
+        <i class="fa fa-refresh fa-2x" aria-hidden="true" id="reset"></i>
+        <!-- <button id="myBtn">Supported Commands</button> -->
+        </div>
+        <!-- //akane print korbi -->
+        <div class="res" id="res">Showing Results for All Countries</div> 
+        <div class="res1" id="res1"></div>
+
+      </div>
     
       <div class="info">
               <div class="tc" ></div>
@@ -2882,7 +2975,7 @@ body
   else if(currentvis=="recovered")return '#238b45';
   else if(currentvis=="active")return 'orange';
 })
-.attr("stroke-width", 3)
+.attr("stroke-width", 2)
 .attr("d", valueline)
 .attr("class", "line")
 .on("mouseenter", d=>{
@@ -3000,9 +3093,15 @@ body.append('g')
   else if(currentvis=="recovered")return "recovered";
   else if(currentvis=="active")return "active";
       })
-      .classed('selected1',true)
-      .attr("r", 2.5)
-      .style("fill", "white")//#69b3a2
+      //.classed('selected1',true)
+      .attr("r", 3)
+      .attr("color", function()
+{
+  if(currentvis=="confirm") return "#2a5599";
+  else if(currentvis=="death") return '#cb181d';
+  else if(currentvis=="recovered")return '#238b45';
+  else if(currentvis=="active")return 'orange';
+})
 
 lasso(yscale(1), data, xscale)
 
@@ -3022,9 +3121,11 @@ function lasso(scal, data, xscale){
   // Lasso functions
         var lasso_start = function() {
             lasso.items()
-                .attr("r",2.5) // reset size
+                .attr("r",3) // reset size
                 .classed("not_possible",true)
-                .style("fill", "white")
+                .style("fill", function(d){
+                   console.log(d)
+                })
                 .classed("selected",false);
         };
 
@@ -3589,7 +3690,7 @@ var legend = svg.selectAll(".legend")
     .data(columnHeaders.slice().reverse())
   .enter().append("g")
     .attr("class", "legend")
-    .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+    .attr("transform", function(d, i) { return "translate(" +(i*20 +  350) + "," +(450) + ") rotate(270)"; });
 
 legend.append("rect")
     .attr("x", width - 18)
@@ -3883,6 +3984,62 @@ lasso(yscale(1), data, xscale)
 }
 
 //end line
+
+
+
+
+ //////pop up/////
+ var modal = document.getElementById("myModal");
+  
+  // Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+  
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+  
+  var reset=document.getElementById("reset");
+  
+  var input = document.getElementById("command");
+  
+  // Execute a function when the user releases a key on the keyboard
+  input.addEventListener("keyup", function(event) {
+  // Number 13 is the "Enter" key on the keyboard
+  if (event.keyCode === 13) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    
+    document.getElementById("command").placeholder="Enter query here"
+    
+    command()
+  }
+  });
+  
+  // When the user clicks the button, open the modal 
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+  
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+  
+  reset.onclick = function(){
+  
+       
+    cls();     
+            
+       
+  }
+  
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+  ///end  pop up/////
 
       </script>
   </html>

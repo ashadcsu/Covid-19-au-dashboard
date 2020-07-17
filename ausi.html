@@ -1,1011 +1,302 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <style>
-      .axis path,
-      .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-      }
-        body {
-              font-family: Helvetica, Arial, sans-serif;
-              background-color:#DCDCDC;
-          }
-          h1 {
-              background-color: #2a5599;
-              color: white;
-              padding: 5px;
-              margin: 0px;
-          }
-          svg {
-              border: solid 1px black;
-          }
-          .mainView {
-              display: flex;
-              flex-direction: row;
-          }
-          .info{
-              display: flex;
-              justify-content: center;
-              margin-bottom: 30px;
-          }
-           div.tc{
-  width: 100px;
-  text-align: center;
-  color:#808080;
-  width: 100px;
-  padding: 0 1em;
-  line-height: 1.2;
-  font-size: .9em;
-  vertical-align: top;
-  border-right:1px dotted #BDBDBD;
-}
-div.tc1{
-  width: 100px;
-  text-align: center;
-  color:#808080;
-  width: 100px;
-  padding: 0 1em;
-  line-height: 1.2;
-  font-size: .9em;
-  vertical-align: top;
-  border-right:1px dotted #BDBDBD;
-}
-div.tc2{
-  width: 100px;
-  text-align: center;
-  color:#808080;
-  width: 100px;
-  padding: 0 1em;
-  line-height: 1.2;
-  font-size: .9em;
-  vertical-align: top;
-  border-right:1px dotted #BDBDBD;
-}
-.lasso path {
-  stroke: rgb(80,80,80);
-  stroke-width:2px;
-}
-
-.lasso .drawn {
-  fill-opacity:.05 ;
-}
-
-.lasso .loop_close {
-  fill:none;
-  stroke-dasharray: 4,4;
-}
-
-.lasso .origin {
-  fill:#3399FF;
-  fill-opacity:.5;
-}
-
-.not_possible {
-  fill:#415679;
+<table class="display table table-bordered table-striped" id="dynamic-table">
+  <thead>
+  <tr>
+  <th>Course Code</th>
+  <th class="center">Course Credit</th>
+  <th class="center">Level-Term</th>
+  <th class="center">Sessional</th>
+  <th class="center">Result</th>
+  <th class="center">Course type</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="gradeA productall_row">
+  <td>CSE-141</td>
+  <td>3</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-142</td>
+  <td>1.5</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-100</td>
+  <td>0.75</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>B+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>EE-181</td>
+  <td>3</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>B+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>EE-182</td>
+  <td>1.5</td>
+  <td>Level 1 - Term 1</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Math-141</td>
+  <td>3</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>A-</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Phy-141</td>
+  <td>3</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>A-</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Phy-142</td>
+  <td>1.5</td>
+  <td>Level 1 - Term 1</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Hum-141</td>
+  <td>2</td>
+  <td>Level 1 - Term 1</td>
+  <td>No</td>
+  <td>B</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-111</td>
+  <td>3.0</td>
+  <td>Level 1 - Term 2</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-121</td>
+  <td>3.0</td>
+  <td>Level 1 - Term 2</td>
+  <td>No</td>
+  <td>B-</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-143</td>
+  <td>3.0</td>
+  <td>Level 1 - Term 2</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Math-143</td>
+  <td>4.0</td>
+  <td>Level 1 - Term 2</td>
+  <td>No</td>
+  <td>B</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Chem-141</td>
+  <td>3.0</td>
+  <td>Level 1 - Term 2</td>
+  <td>No</td>
+  <td>B</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-122</td>
+  <td>1.5</td>
+  <td>Level 1 - Term 2</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-144</td>
+  <td>1.5</td>
+  <td>Level 1 - Term 2</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Chem-142</td>
+  <td>0.75</td>
+  <td>Level 1 - Term 2</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Hum-144</td>
+  <td>1.5</td>
+  <td>Level 1 - Term 2</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>ME-246</td>
+  <td>1.5</td>
+  <td>Level 2 - Term 1</td>
+  <td>Yes</td>
+  <td>B+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>EE-281</td>
+  <td>3</td>
+  <td>Level 2 - Term 1</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>EE-282</td>
+  <td>0.75</td>
+  <td>Level 2 - Term 1</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-241</td>
+  <td>3</td>
+  <td>Level 2 - Term 1</td>
+  <td>No</td>
+  <td>B</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-242</td>
+  <td>1.5</td>
+  <td>Level 2 - Term 1</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Math-241</td>
+  <td>3</td>
+  <td>Level 2 - Term 1</td>
+  <td>No</td>
+  <td>A-</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-245</td>
+  <td>3</td>
+  <td>Level 2 - Term 1</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>HUM-243</td>
+  <td>3</td>
+  <td>Level 2 - Term 1</td>
+  <td>No</td>
+  <td>A</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-243</td>
+  <td>3</td>
+  <td>Level 2 - Term 2</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-244</td>
+  <td>1.5</td>
+  <td>Level 2 - Term 2</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>EE-283</td>
+  <td>3</td>
+  <td>Level 2 - Term 2</td>
+  <td>No</td>
+  <td>B-</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>EE-284</td>
+  <td>0.75</td>
+  <td>Level 2 - Term 2</td>
+  <td>Yes</td>
+  <td>B</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-251</td>
+  <td>3</td>
+  <td>Level 2 - Term 2</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-252</td>
+  <td>1.5</td>
+  <td>Level 2 - Term 2</td>
+  <td>Yes</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-223</td>
+  <td>3</td>
+  <td>Level 2 - Term 2</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-224</td>
+  <td>0.75</td>
+  <td>Level 2 - Term 2</td>
+  <td>Yes</td>
+  <td>B+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>Math-243</td>
+  <td>3</td>
+  <td>Level 2 - Term 2</td>
+  <td>No</td>
+  <td>A+</td>
+  <td>regular</td>
+  </tr>
+  <tr class="gradeA productall_row">
+  <td>CSE-200</td>
+  <td>1.5</td>
+  <td>Level 2 - Term 2</td>
+  <td>Yes</td>
+  <td>A-</td>
+  <td>regular</td>
+  </tr>
+  </tbody></table>
   
-}
-
-.possible {
-  fill: violet;
-}
-
-.selected {
-  fill : yellow;
-  fill-opacity: 1;
-  stroke: black;
-  stroke-width: 1.5;
-}
-
-.isselected {
-  fill: red;
-}
-div.tooltip1{
-
-position: absolute; text-align: left; width: 200px; height: 35px; padding: 15px;font: 14px calibri; background:white; color: black; border: 2px; border-radius: 8px; pointer-events: none;
-
-}
-.line{
-    fill: none;
-	}
-</style>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COVID-19 in Australia</title>
-      <script src="./d3-lasso.min.js"></script>
-      <script src="d3.js"></script>
-      <title>COVID-19 Dashboard</title>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    
-</head>
-<body>
-    <h1>COVID-19 in Australia</h1>
-    <div class="info">
-        <div class="tc" >Confirmed Cases</div>
-       <div class="tc1">Deaths</div>
-        <div class="tc2">People Recovered</div> 
-        <div style="border-right:1px dotted #BDBDBD; padding: 0 1em;">
-            <form >
-                <label>Choose Case:</label>
-              <select id="options" name="cars" onchange="ddl()">
-                <option value="Confirmed Cases">Confirmed Cases</option>
-                <option value="Death Cases">Death Cases</option>
-                <option value="Recovered Cases">Recovered Cases</option>
-                <!-- <option value="New Cases">New Cases</option> -->
-              </select>
-            </form>
-          </div>
-          <div>
-              <label for="amount">date range:</label>
-              <input type="text" id="amount" style="border: 0; color: blue; font-weight: bold;" size="30"/>     
-            <div id="slider-range"></div>
-          </div>
-</div>
-    <div class="mainView">
-        <div id="bar">
-            <svg id="BarChart" >
-                
-            </svg>
-        </div>
-        <div>
-            <svg id="Map" height="500px" width="500px">
-                <g id="G"></g>
-            </svg>
-        </div>
-        <div>
-            <svg id="line" height="450px" width="560px">
-              <g id="body2" style="transform: translate(60px,10px);margin-top:50px ;"></g>
-            </svg>
-        </div>
-    </div>
-</body>
-<script>
-    
-
-
-    let store={}
-      let slidedata;
-    //   store.done=[];
-    //   store.afterlasso=[];
-    //   store.mapafterlinelasso={}
-          let x=0
-          let y=0
-          let k=1
-          let deg=0
-          let svg=d3.select("#Map")
-          let currentvis="";
-          div = d3
-        .select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0)
-      
-      
-        function loadData() {
-          return Promise.all([
-          d3.json("au_states.geojson"),
-    d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv', (d, rows, cols) => { 
-        
-        const dates = cols.slice(4, cols.length);
-        const data = [];
-          
-        dates.forEach((dd, i)=> {
-          const match = d['Country/Region'];
-          const country = d['Country/Region'];
-          const short = d['Country/Region'];
-          const region = d['Province/State'];
-          const iso = (match !== undefined)?match.iso:'';
-          const lat = d['Lat'];
-          const lon = d['Long'];
-          const date = dd;
-          const confirmed = +d[dd];
-          const pivot = {
-            country: country, short: short, region: region, lat: lat, lon: lon, date: date, confirmed: confirmed, iso: iso
-          }
-          
-          data.push(pivot)
-          
-        })
-        //console.log(data)
-      
-        return data
-       
-      }),
-      d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv', (d, rows, cols) => { 
-        
-        const dates = cols.slice(4, cols.length);
-        const data = [];
-        
-        dates.forEach(dd=> {
-          const match = d['Country/Region']
-          const country = d['Country/Region'];
-          const region = d['Province/State'];
-          const iso = (match !== undefined)?match.iso:'';
-          const lat = d['Lat'];
-          const lon = d['Long'];
-          const date = dd;
-          const deaths = +d[dd];
-          const pivot = {
-            country: country, region: region, lat: lat, lon: lon, date: date, deaths: deaths, iso: iso
-          }
-          
-          data.push(pivot)
-          
-        })
-        
-        return data
-        
-      }),
-      
-      d3.csv('https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_recovered_global.csv', (d, rows, cols) => { 
-        
-        const dates = cols.slice(4, cols.length);
-        const data = [];
-        
-        dates.forEach(dd=> {
-          const match = d['Country/Region']
-          const country = d['Country/Region'];
-          const region = d['Province/State'];
-          const iso = (match !== undefined)?match.iso:'';
-          const lat = d['Lat'];
-          const lon = d['Long'];
-          const date = dd;
-          const recovered = +d[dd];
-          const pivot = {
-            country: country, region: region, lat: lat, lon: lon, date: date, recovered: recovered, iso: iso
-          }
-          
-          data.push(pivot)
-          
-        })
-        
-        return data
-        
-      })
-          
-          ]).then(datasets => {
-              
-              store.geoJSON=datasets[0];
-              store.coronadat=datasets[1];
-              store.death=datasets[2];
-              store.recovered=datasets[3];
-              return store;
-          })
-      }
-      loadData().then(showdata)
-
-      function showdata()
-      {
-          drawmap(store.geoJSON)
-          total_case_print(store.time.features[store.time.features.length-1].attributes)
-          store.linedata=prepline()
-          groupbytime()
-          drawline(store.sumdate.values)
-         // total_case_print(store.time.features[store.time.features.length-1].attributes)
-         // store.linedata=prepline()
-         // drawline(store.linedata)
-          
-      }
-      function prepline()
-      {
-        let new_data=[]
-        let data=store.time.features
-        data[0].attributes.new_cases=0
-        data[0].attributes.new_deaths=0
-        new_data.push(data[0].attributes)
-        for(let i=1;i<data.length-1;i++)
-        {
-              data[i].attributes.new_cases= data[i].attributes.confirmed - data[i-1].attributes.confirmed
-              data[i].attributes.new_deaths= data[i].attributes.deaths - data[i-1].attributes.deaths
-              if(data[i].attributes.new_cases<0)data[i].attributes.new_cases=0
-              if(data[i].attributes.new_deaths<0)data[i].attributes.new_deaths=0
-              new_data.push(data[i].attributes)
-        }
-        return new_data
-      }
-
-
-      function total_case_print(data)
-      {
-        
-          d3.select(".tc").html(
-"<span style='font-weight:bold;font-size:1.5em;color:#2a5599'>"+data.confirmed+"</span>"+ 
-"</br>"+"Confirmed Cases"
-                
-              )
-
-              d3.select(".tc1").html(
-              "<span style='font-weight:bold;font-size:1.5em;color:#cb181d'>"+data.deaths+"</span>"+
-"</br>"+"Deaths"
-              )
-
-              d3.select(".tc2").html(
-              "<span style='font-weight:bold;font-size:1.5em;color:#238b45'>"+data.Total_Tests+"</span>"+
-"</br>"+"Total Tested"
-              )
-          
-      
-      }
-      
-      
-      
-
-      function drawmap(data)
-      {
-        div = d3
-        .select("body")
-        .append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0)
-        let width = 600;
-        let height = 500;
-        let projection = d3.geoMercator()
-        projection.scale(509)
-                  .translate([width / 2-1220, height / 2 - 250]);
-
-        let path =d3.geoPath()
-                   .projection(projection);
-
-        let container=d3.select("#G")
-       let a= container.selectAll("path").data(data.features)
-            .enter().append("path")
-            .attr("d",d=>path(d) )
-            .attr("fill","yellow")
-            .attr("stroke","gray")
-            .on("mousemove",function(d)
-            {
-              d3.select(this).attr("fill","purple")
-              div
-              .transition()
-              .duration(200)
-              .style("opacity", .9);
-            div
-              .html(
-                "<b>State Name: </b>" +
-                  d.properties.STATE_NAME
-                //   "</br><b>CONFIRMED CASES: </b>" +
-                // d.confirmed +
-                // "</br><b>DEATH CASES: </b>" +
-                // d.deaths +
-                // "</br><b>RECOVERED CASES: </b>" +
-                // d.recovered +
-                //   "</br>AS OF " +
-                // store.date
-              )
-              .attr("class","tooltip1")
-              .style("left", 550 + "px")
-              .style("top", 235 + "px");
-               
-              
-            })
-            .on("mouseleave",function(d)
-            {
-              d3.select(this).attr("fill","yellow")
-              div
-              .attr("class","tooltip1")
-              .transition()
-              .duration(500)
-              .style("opacity", 0);
-            })
-            .append("g")
-
-        
-
-      }
-
-      function prepbardata()
-      {
-          let l=store.time.features.length
-
-          let d=[]
-        let ln=store.time.features[l-1].attributes
-
-        let a={
-          region: "ACT",
-          confirmed: ln.ACT,
-          death: ln.ACT_Deaths
-        }
-
-        d.push(a)
-
-
-         a={
-          region: "NSW",
-          confirmed: ln.NSW,
-          death: ln.NSW_Deaths
-        }
-
-        d.push(a)
-
-
-
-         a={
-          region: "NT",
-          confirmed: ln.NT,
-          death: ln.NT_Deaths
-        }
-
-        d.push(a)
-
-
-         a={
-          region: "QLD",
-          confirmed: ln.QLD,
-          death: ln.QLD_Deaths
-        }
-
-        d.push(a)
-
-
-
-       a={
-          region: "SA",
-          confirmed: ln.SA,
-          death: ln.SA_Deaths
-        }
-
-        d.push(a)
-
-
-         a={
-          region: "TAS",
-          confirmed: ln.TAS,
-          death: ln.TAS_Deaths
-        }
-
-        d.push(a)
-
-
-         a={
-          region: "VIC",
-          confirmed: ln.VIC,
-          death: ln.VIC_Deaths
-        }
-
-        d.push(a)
-
-         a={
-          region: "WA",
-          confirmed: ln.WA,
-          death: ln.WA_Deaths
-        }
-
-        d.push(a)
-          
-           return d
-      }
-
-      //Draw line here
-
-function drawline(data){
-
-let body = d3.select("#body2")
-document.getElementById("body2").innerHTML="";
-let height = 400;
-let width = 490;
-data.map(d=> {
- d.date= new Date(d.date)
- d.confirmed = +d.confirmed
-})
-let max = d3.max(data,d=>d.confirmed)
-let yscale = d3.scaleLinear()
-.domain([0,max])
-.range([height,0])
-body.append("g")
-.call(d3.axisLeft(yscale)
-        .ticks(15)
-        .tickFormat(d3.format(".0s")));
-
-
-let xscale = d3.scaleTime()
-.domain(d3.extent(data,d=>d.date))
-.range([0,width])
-body.append("g")
-.attr("transform", "translate(0,"+height+")")
-.call(d3.axisBottom(xscale)
-.tickFormat(d3.timeFormat("%d %b")))
-.selectAll("text")  
-            .style("text-anchor", "end")
-            .attr("dx", "-.8em")
-            .attr("dy", ".15em")
-            .attr("transform", "rotate(-65)" );
-
-var valueline = d3.line()
-.x(d => xscale(d.date))
-.y(d => yscale(d.confirmed))
-.defined(d => !!d.confirmed)
-
-//for tooltip
-
-          
-body.append('rect')
-    .style("fill", "none")
-    .style("pointer-events", "all")
-    .attr('width', width)
-    .attr('height', height)
-    //.on('mousemove', mousemove);
-
-//tool tip
-body
-.append("path")
-.datum(data)
-.attr("fill", "none")
-.attr("stroke", "#2a5599")
-.attr("stroke-width", 3)
-.attr("d", valueline)
-.attr("class", "line")
-.classed("selectedL",function (d) { 
-  if(currentvis == "confirm"){ return false;}
-  else{ return true; }
-  
-
-  })//here we
-/*.on("mouseenter", d=>{
-			
-      showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
-    })
-.on("mouseleave", d=>{
-      d3.select("#tooltip").style('display', 'none')
-    })
-  .on("mousemove", d=>{
-      showtool(1,[d3.event.clientX -180, d3.event.clientY-30])
-    })
-*/
-//draw line end 
-
-/// for tooltip
-/*
-var bisect = d3.bisector(function(d) { return d.date; }).left;
-function mousemove() {
-        // recover coordinate we need
-        var x0 = xscale.invert(d3.mouse(this)[0]);
-        var i = bisect(data, x0, 1);
-        selectedData = data[i]
-        a= selectedData
-
-       
-        
-}
-
-function showtool(check, coord){
- var val
- var cas
- if(check == 1){
-    val = a.confirmed
-    cas = "Confirmed: "
- }
- else if(check==2){
-    val = a.recovered
-    cas = "Recovered: "
-
- }
- else{
-    val = a.deaths
-    cas = "Deaths: "
- }
-  var formatdate = d3.timeFormat("%d-%b-%y")
-
-  
-
-		d3.select("#tooltip")
-			.html(cas+val+"<br> date: "+ formatdate(a.date))
-			.style('top', coord[1]-15+"px")
-			.style("left", coord[0]+15+"px")
-			.style("display", "block")
-			.style("color", "blue")
-			
-	}
-     */
-//end tooltip
-
-
-//draw deaths
-var valuedth = d3.line()
-.x(d => xscale(d.date))
-.y(d => yscale(d.deaths))
-.defined(d => !!d.deaths)
-
-body
-.append("path")
-.datum(data)
-.attr("fill", "none")
-.attr("stroke", '#cb181d')
-.attr("stroke-width", 3)
-.attr("d", valuedth)
-.attr("class", "line")
-.classed("selectedL",function (d) {
-  if(currentvis == "death"){ return false;}
-  else{ return true; }
-  
-
-  })
-/*.on("mouseenter", d=>{
-			
-      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
-    })
-.on("mouseleave", d=>{
-      d3.select("#tooltip").style('display', 'none')
-    })
-  .on("mousemove", d=>{
-      showtool(3,[d3.event.clientX -180, d3.event.clientY-30])
-    })*/
-    body.append('g')
-    .selectAll("dot")
-    .data(data)
-    .enter()
-    .append("circle")
-      .attr("cx", function (d) { return xscale(d.date); } )
-      .attr("cy", function (d) { return yscale(d.confirmed); } )
-      .attr("case", "confirm")
-      .attr("r", 0)
-      .style("fill", "red")//#69b3a2
-      body.append('g')
-    .selectAll("dot")
-    .data(data)
-    .enter()
-    .append("circle")
-      .attr("cx", function (d) { return xscale(d.date); } )
-      .attr("cy", function (d) { return yscale(d.deaths); } )
-      .attr("case", "death")
-      .attr("r", 0)
-      .style("fill", "red")//#69b3a2
-
-//draw bar here
-/*
-let join = body.selectAll('rect')
-		    .data(data)
-
-		    join.enter()
-		    .append("rect")
-		    .attr("fill", "blue")
-		    .attr("width", d=> xscale(d.date))
-		    .attr("height",50)
-		    .attr("y",d=>yscale(d.new_confirmed))*/
-
-//end bar
-
-
-
-
-lasso(yscale(1), data, xscale)
-      }
-
-      //end line
-
-      //lasso
-
-      let a;
-function lasso(scal, data, xscale){
-  let body = d3.select("#line")
-  var circles = body.selectAll("circle")
-  // Lasso functions
-        var lasso_start = function() {
-            lasso.items()
-                .attr("r",0) // reset size
-                .classed("not_possible",true)
-                .classed("selected",false);
-        };
-
-        var lasso_draw = function() {
-        
-            
-            lasso.possibleItems()
-                .classed("not_possible",false)
-                .classed("possible",true);
-                
-               
-                
-              
-               
-                //console.log("I am from lasso data")
-
-                
-            
-            lasso.notPossibleItems()
-                .classed("not_possible",true)
-                .classed("possible",false);
-        };
-        var lasso_end = function() {
-            // Reset the color of all dots
-            lasso.items()
-                .classed("not_possible",false)
-                .classed("possible",false);
-                let fcircle = lasso.selectedItems()
-                let newcir = lasso.selectedItems()._groups[0].filter(function(d){ return d.getAttribute("case") == currentvis})
-                fcircle._groups[0] = newcir;
-            // Style the selected dots
-            lasso.selectedItems()
-                .classed("selected",true)
-                .attr("r",2.5)
-                .style("fill", "yellow");
-                var lassod = fcircle._groups[0]
-                var bisect = d3.bisector(function(d) { return d.date; }).left;
-                let a = lassod;
-                if(a.length){
-                var x1 =xscale.invert(a[0].cx.baseVal.value);
-                var x2 =xscale.invert(a[a.length-1].cx.baseVal.value);
-                //afterlasso(x1,x2)
-                }
-                if(!a.length){
-                  //clearbar()
-                  //drawbar(store.done.sort((a,b)=>b.confirmed - a.confirmed))
-                }
-            // Reset the style of the not selected dots
-            lasso.notSelectedItems()
-                .attr("r",0);
-
-          //console.log(lasso.selectedItems());
-
-        };
-        
-        var lasso = d3.lasso()
-            .closePathSelect(true)
-            .closePathDistance(100)
-            .items(circles)
-            .targetArea(body)
-            .on("start",lasso_start)
-            .on("draw",lasso_draw)
-            .on("end",lasso_end);
-        
-        body.call(lasso);
-}
-
-
-
-
-
-
-
-      //end lasso
-
-
-
-
-
-      ////processs older data///
-
-
-
-
-      function groupbytime()
-      {
-        //console.log("hello")
-        var byCountry = d3.nest()
-          .key(function(d) {
-            return d.country;
-          })
-          .entries(store.coronadat.flat());
-         
-        //console.log(byCountry);
-        b=byCountry[0].values
-        for(i of byCountry)
-        {
-          if(i.values>b){
-            let a={}
-            for(j of i.values)
-            {
-               if (!(j.date in a) && j.country=="Australia")
-               {
-                 a[j.date]={
-                  country: j.country,
-                  lat: j.lat,
-                  lon: j.lon,
-                  iso: j.iso,
-                  date: j.date,
-                  confirmed: j.confirmed
-
-                 }
-              
-
-               }
-               else if(j.date in a && j.country=="Australia"){
-                
-              a[j.date].confirmed+=j.confirmed;
-               }
-
-            }
-            let l=[]
-            for( h in a)
-            {
-              
-              l.push(a[h])
-            }
-          
-            i.values=l
-            
-          }
-
-          
-        }
-       
-
-//////death///////
-        var byCountrydeath = d3.nest()
-          .key(function(d) {
-            return d.country;
-          })
-          .entries(store.death.flat());
-         
-        b=byCountrydeath[0].values
-        for(i of byCountrydeath)
-        {
-          if(i.values>b){
-            let a={}
-            for(j of i.values)
-            {
-               if (!(j.date in a)&& j.country=="Australia")
-               {
-                 a[j.date]={
-                  country: j.country,
-                  lat: j.lat,
-                  lon: j.lon,
-                  iso: j.iso,
-                  date: j.date,
-                  deaths: j.deaths
-
-                 }
-              
-
-               }
-               else if(j.date in a && j.country=="Australia"){
-                
-              a[j.date].deaths+=j.deaths;
-               }
-
-            }
-            let l=[]
-            for( h in a)
-            {
-              
-              l.push(a[h])
-            }
-            i.values=l
-          }
-        }
-        
-
-
-/////////recovered////////
-        var byCountryrecoverd = d3.nest()
-          .key(function(d) {
-            return d.country;
-          })
-          .entries(store.recovered.flat());
-         
-        b=byCountryrecoverd[0].values
-        for(i of byCountryrecoverd)
-        {
-          if(i.values>b){
-            let a={}
-            for(j of i.values)
-            {
-               if (!(j.date in a) && j.country=="Australia")
-               {
-                 a[j.date]={
-                  country: j.country,
-                  lat: j.lat,
-                  lon: j.lon,
-                  iso: j.iso,
-                  date: j.date,
-                  recovered: j.recovered
-
-                 }
-              
-
-               }
-               else if(j.date in a && j.country=="Australia"){
-                
-              a[j.date].recovered+=j.recovered;
-               }
-
-            }
-            let l=[]
-            for( h in a)
-            {
-              
-              l.push(a[h])
-            }
-            i.values=l
-          }
-        }
-
-
-
-      
-      // for(i=0;i<byCountry.length;i++)
-      // {
-      //   for(j=0;j<byCountry[i].values.length;j++)
-      //   {
-      //     byCountry[i].values[j].deaths=byCountrydeath[i].values[j].deaths;
-      //     // byCountry[i].values[j].recovered=byCountryrecoverd[i].values[j].recovered;
-      //      byCountry[i].values[j].active=byCountry[i].values[j].confirmed - byCountry[i].values[j].deaths;
-      //     if (j==0){
-      //     byCountry[i].values[j].new=0}
-      //     else{
-      //       byCountry[i].values[j].new=byCountry[i].values[j].confirmed - byCountry[i].values[j-1].confirmed;
-      //     }
-      //   }
-      // }
-      // for (i of byCountry)
-      // {
-      //    for(j of byCountryrecoverd)
-      //    {
-           
-      //         if(i.key==j.key)
-      //         {
-      //           for( k=0;k<j.values.length;k++)
-      //           {
-      //             i.values[k].recovered=j.values[k].recovered;
-      //             i.values[k].active-=j.values[k].recovered;
-      //           }
-      //           break;
-      //         }
-      //    }
-         
-      // }
-
-      let ln=byCountry[8].values.length
-
-      for(let i=0;i<ln;i++)
-      {
-        byCountry[8].values[i].recovered=byCountryrecoverd[8].values[i].recovered;
-        byCountry[8].values[i].deaths=byCountrydeath[8].values[i].deaths;
-        
-        byCountry[8].values[i].new_confirmed=0
-        byCountry[8].values[i].new_deaths=0
-        byCountry[8].values[i].new_recovered=0
-      
-      
-        
-      }
-
-      for(let i=1;i<ln;i++)
-      {
-        
-        byCountry[8].values[i].new_confirmed= byCountry[8].values[i].confirmed - byCountry[8].values[i-1].confirmed
-        byCountry[8].values[i].new_deaths=byCountry[8].values[i].deaths - byCountry[8].values[i-1].deaths
-        byCountry[8].values[i].new_recovered=byCountry[8].values[i].recovered - byCountry[8].values[i-1].recovered
-      }
-      
-      // // console.log(byCountrydeath)
-      // // console.log(byCountryrecoverd)
-      // // console.log(byCountryrecoverd)
-      //    store.time=byCountry;
-
-      // df=byCountry[0].values.length
-      // k=[]
-      
-      
-      // for(i=0;i<df;i++)
-      // {
-      //   let c=0;
-      //   let d=0;
-      //   let r=0;
-      //   dt=''
-      //   for(j=0;j<store.time.length;j++)
-      //   {
-      //     dt=store.time[j].values[i].date;
-      //     c+=store.time[j].values[i].confirmed;
-      //     d+=store.time[j].values[i].deaths;
-      //     r+=store.time[j].values[i].recovered;
-      //   }
-      //   k.push({
-      //     date:dt,
-      //     confirmed: c,
-      //     deaths: d,
-      //     recovered: r
-      //   })
-           store.sumdate=byCountry[8]
-       
-      // }
-        
-        
-      }
-</script>
-</html>
