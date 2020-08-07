@@ -3074,7 +3074,9 @@ setTimeout(slide,2000)
         var str = Math.abs(d1-d3)/86400000
         var end = Math.abs(d2-d3)/86400000
         afterlasso(d1, d2)
-        drawline(slidedata.slice(str,end))
+        if(store.currentvis!="All Cases")drawline(slidedata.slice(str,end))
+        else drawAlline(slidedata.slice(str,end))
+        
         if(store.currentcommand!=null){
            command()
         }
@@ -3325,8 +3327,9 @@ a=0
       }
 
       console.log(finald)
+      if(store.currentvis!="All Cases")drawline(finald)
+      else drawAlline(finald)
       
-      drawline(finald)
     }
 
 
@@ -3376,7 +3379,8 @@ a=0
           ++j;
         }
       }
-      drawline(finald)
+      if(store.currentvis!="All Cases")drawline(finald)
+      else drawAlline(finald)
     }
 
    //end bar lasso
@@ -3574,8 +3578,8 @@ function drawAlline(data){
 
 let body = d3.select("#body2")
 document.getElementById("body2").innerHTML="";
-let height = 400;
-let width = 430;
+let height = 450;
+let width = 530;
 data.map(d=> {
 d.date= new Date(d.date)
 d.confirmed = +d.confirmed
