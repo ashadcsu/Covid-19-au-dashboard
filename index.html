@@ -501,8 +501,9 @@ div.tooltip1{
       store.done=[];
       store.afterlasso=[];
       store.currentcommand=null;
-      store.currentselectedcountries=[];
+      store.currentselectedregions=[];
       store.mapafterlinelasso={}
+      store.currentvis=null
           let x=0
           let y=0
           let k=1
@@ -989,7 +990,7 @@ div.tooltip1{
                 dn.push(i.__data__.properties.STATE_NAME)
               }
       }
-      store.currentselectedcountries=cn;
+      store.currentselectedregions=dn;
       store.afterlasso=d
       total_case_print(d)
       total_case_print1(d)
@@ -1034,11 +1035,24 @@ div.tooltip1{
               lasso.items(container.selectAll('path'))
 
 
+              let l= d3.select("#Map").selectAll("path")._groups[0]
       
-  
-           
-           
-            
+      for(i=0;i<8;i++)
+      {
+       
+       
+        if(store.currentselectedregions.includes(l[i].__data__.region) )
+        {
+          
+         
+          d3.select(l[i]).classed("selected",true)
+         
+ 
+        }
+        else{
+          d3.select(l[i]).classed("selected",false)
+        }
+      }
             
       }
       
@@ -1291,6 +1305,7 @@ div.tooltip1{
                       j.recovered=a[i].recovered;
                       j.country=a[i].country;
                       j.active=a[i].active;
+                      j.region=a[i].region;
                       break;
                   }
                   else {
@@ -1465,14 +1480,16 @@ div.tooltip1{
                   
                   let d=[];
                   let cn=[];
+                  let dn=[];
                   for(i of lasso.selectedItems()._groups[0]){
               if(i.__data__!=null)
               {
                 d.push(i.__data__)
                 cn.push(i.__data__.country)
+                dn.push(i.__data__.properties.STATE_NAME)
               }
       }
-      store.currentselectedcountries=cn;
+      store.currentselectedregions=dn;
       store.afterlasso=d
       total_case_print(d)
       total_case_print1(d)
@@ -1632,14 +1649,16 @@ console.log()
                   
                       let d=[];
                   let cn=[];
+                  let dn=[];
                   for(i of lasso.selectedItems()._groups[0]){
               if(i.__data__!=null)
               {
                 d.push(i.__data__)
                 cn.push(i.__data__.country)
+                dn.push(i.__data__.properties.STATE_NAME)
               }
       }
-      store.currentselectedcountries=cn;
+      store.currentselectedregions=dn;
       store.afterlasso=d
       total_case_print(d)
       total_case_print1(d)
@@ -1790,14 +1809,16 @@ console.log()
 
                       let d=[];
                   let cn=[];
+                  let dn=[];
                   for(i of lasso.selectedItems()._groups[0]){
               if(i.__data__!=null)
               {
                 d.push(i.__data__)
                 cn.push(i.__data__.country)
+                dn.push(i.__data__.properties.STATE_NAME)
               }
       }
-      store.currentselectedcountries=cn;
+      store.currentselectedregions=cn;
       store.afterlasso=d
       total_case_print(d)
       total_case_print1(d)
@@ -1885,8 +1906,8 @@ console.log()
           var selectBox = document.getElementById("countries");
           var selectedValue = selectBox.options[selectBox.selectedIndex].value;
          
-          store.currentselectedcountries=[];
-          store.currentselectedcountries.push(selectedValue);
+          store.currentselectedregions=[];
+          store.currentselectedregions.push(selectedValue);
         
          let c=selectedValue;
          
@@ -1940,16 +1961,6 @@ console.log()
           
         }
 
-      
-      
-          
-
-         
-          
-
-    
-          
-          
       }
 
       function myScript1(e){
@@ -2001,11 +2012,26 @@ console.log()
         let cf=0;
         let d;
         if(data.length!=0){
-          for(i of data)
-          {
-            cf+=i.confirmed;
-      d=i.date;
-          }
+          if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.confirmed;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.confirmed;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc").html(
 "<span style='font-weight:bold;font-size:1.5em;color:#2a5599'>"+cf+"</span>"+ 
 "</br>"+"Confirmed Cases"
@@ -2015,11 +2041,26 @@ console.log()
       }
       else{
         data=store.done
-        for(i of data)
-          {
-            cf+=i.confirmed;
-      d=i.date;
-          }
+        if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.confirmed;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.confirmed;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc").html(
               "<span style='font-weight:bold;font-size:1.5em;color:#2a5599'>"+cf+"</span>"+
 "</br>"+"Confirmed Cases"
@@ -2034,11 +2075,26 @@ console.log()
         let cf=0;
         let d;
         if(data.length!=0){
-          for(i of data)
-          {
-            cf+=i.deaths;
-      d=i.date;
-          }
+          if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.deaths;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.deaths;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc1").html(
               "<span style='font-weight:bold;font-size:1.5em;color:#cb181d'>"+cf+"</span>"+
 "</br>"+"Deaths"
@@ -2047,11 +2103,26 @@ console.log()
       }
       else{
         data=store.done
-        for(i of data)
-          {
-            cf+=i.deaths;
-      d=i.date;
-          }
+        if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.deaths;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.deaths;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc1").html(
               "<span style='font-weight:bold;font-size:1.5em;color:#cb181d'>"+cf+"</span>"+
 "</br>"+"Deaths"
@@ -2067,11 +2138,26 @@ console.log()
         let cf=0;
         let d;
         if(data.length!=0){
-          for(i of data)
-          {
-            cf+=i.recovered;
-      d=i.date;
-          }
+          if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.recovered;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.recovered;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc2").html(
               "<span style='font-weight:bold;font-size:1.5em;color:#238b45'>"+cf+"</span>"+
 "</br>"+"People Recovered"
@@ -2080,11 +2166,26 @@ console.log()
       }
       else{
         data=store.done
-        for(i of data)
-          {
-            cf+=i.recovered;
-      d=i.date;
-          }
+        if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.recovered;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.recovered;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc2").html(
               "<span style='font-weight:bold;font-size:1.5em;color:#238b45'>"+cf+"</span>"+
 "</br>"+"People Recovered"
@@ -2099,11 +2200,26 @@ console.log()
         let cf=0;
         let d;
         if(data.length!=0){
-          for(i of data)
-          {
-            cf+=i.active;
-      d=i.date;
-          }
+          if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.active;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.active;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc3").html(
               "<span style='font-weight:bold;font-size:1.5em;color: #db920d'>"+cf+"</span>"+
 "</br>"+"Active Cases"
@@ -2112,11 +2228,26 @@ console.log()
       }
       else{
         data=store.done
-        for(i of data)
-          {
-            cf+=i.active;
-      d=i.date;
-          }
+        if(store.currentselectedregions.length==0){
+            for(i of data)
+            {
+              cf+=i.active;
+        d=i.date;
+            }
+            }
+            else{
+              
+              
+              for(i of data)
+            {
+              
+              if(store.currentselectedregions.includes(i.region)){
+              cf+=i.active;
+        d=i.date;
+              }
+            }
+  
+            }
           d3.select(".tc3").html(
               "<span style='font-weight:bold;font-size:1.5em;color: #db920d'>"+cf+"</span>"+
 "</br>"+"Active Cases"
@@ -2133,6 +2264,7 @@ console.log()
           //console.log("hello")
           //drawCirclesdeath(groupbyCountryDeath(store.death),"#ff9500")
           //drawCircles(groupbyCountryDeath(store.death),)
+          store.currentvis=selectedValue;
           if(selectedValue=="All Cases")
           {
             d3.select("#BarChart").remove()
@@ -2474,7 +2606,7 @@ bars.selectAll("rect")
                 dn.push(i.__data__.region)
               }
       }
-      store.currentselectedcountries=cn;
+      store.currentselectedregions=dn;
 
       total_case_print(d)
       total_case_print1(d)
@@ -2531,320 +2663,26 @@ bars.selectAll("rect")
               svg.call(lasso)
               lasso.items(svg.selectAll('rect'))
 
-          
-
-if (isScrollDisplayed)
-{
-var xOverview = d3.scaleBand()
-                .domain(data.map(function (d) { return d.country; }))
-                .range([0, width])
-                .padding(.2);
-yOverview = d3.scaleLinear().range([heightOverview, 0]);
-yOverview.domain(yscale.domain());
-
-var subBars = diagram.selectAll('.subBar')
-    .data(data)
-
-subBars.enter().append("rect")
-    .classed('subBar', true)
-    .attr({
-        height: function(d) {
-                             if(currentvis=="confirm")
-                              {
-                                  return heightOverview - yOverview(d.confirmed);
-                              }
-                              else if(currentvis=="death")
-                              {
-                                  return heightOverview - yOverview(d.deaths);
-                              }
-                              else{
-                                  return heightOverview - yOverview(d.recovered);
-                              }
-
-            
-        },
-        width: function(d) {
-            return xOverview.bandwidth()
-        },
-        x: function(d) {
-
-            return xOverview(d.country);
-        },
-        y: function(d) {
-            
-                              if(currentvis=="confirm")
-                              {
-                                  return height + heightOverview + yOverview(d.confirmed)
-                              }
-                              else if(currentvis=="death")
-                              {
-                                  return height + heightOverview + yOverview(d.deaths)
-                              }
-                              else{
-                                  return height + heightOverview + yOverview(d.recovered)
-                              }
-
-            
-        }
-    })
-
-var displayed = d3.scaleQuantize()
-            .domain([0, width])
-            .range(d3.range(data.length));
-
-diagram.append("rect")
-            .attr("transform", "translate(0, " + (height + margin.bottom) + ")")
-            .attr("class", "mover")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("height", selectorHeight)
-            .attr("width", Math.round(parseFloat(numBars * width)/data.length))
-            .attr("pointer-events", "all")
-            .attr("cursor", "all-scroll")
-            .call(d3.drag().on("drag", display));
-}
-function  display () {
-  var x = parseInt(d3.select('.mover').attr("x")),
-      nx = x + d3.event.dx,
-      w = parseInt(d3.select('.mover').attr("width")),
-      f, nf, new_data, rects;
-    
-  if ( nx < 0 || nx + w > width ) return;
-
-  d3.select(this).attr("x", nx);
-
-  f = displayed(x);
-  nf = displayed(nx);
-
-  if ( f === nf ) return;
-
-  new_data = data.slice(nf, nf + numBars);
-
-  xscale.domain(new_data.map(function (d) { return d.country; }));
-  diagram.select(".x.axis").call(xAxis).selectAll("text")	
-          .style("text-anchor", "end")
-          .attr("dx", "-.8em")
-          .attr("dy", "-.5em")
-          .attr("transform", function(d) {
-              return "rotate(-90)" 
-              });
-
-  rects = bars.selectAll("rect")
-    .data(new_data, function (d) {return d.country; });
-
-  rects.attr("x", function (d) { return xscale(d.country); });
-
-  rects.enter().append("rect")
-  .attr("fill", function(d)
-          {
-            if(currentvis=="confirm")return "#2a5599";
-            else if(currentvis=="death")return '#cb181d';//'#005a32''#99000d' 
-            else if(currentvis=="recovered") return '#238b45';
-          })   
-    .attr("x", function (d) { return xscale(d.country); })
-    .attr("y", function (d) { if(currentvis=="confirm")
-                              {
-                                  return yscale(d.confirmed);
-                              }
-                              else if(currentvis=="death")
-                              {
-                                  return yscale(d.deaths);
-                              }
-                              else{
-                                  return yscale(d.recovered);
-                              } })
-    .attr("width", xscale.bandwidth())
-    .attr("height", function (d) {
-                               if(currentvis=="confirm")
-                              {
-                                  return height - yscale(d.confirmed);
-                              }
-                              else if(currentvis=="death")
-                              {
-                                  return height - yscale(d.deaths);
-                              }
-                              else{
-                                  return height - yscale(d.recovered);
-                              }
-          }).on("mouseenter", function(d) {
-                d3.select(this).attr("fill", "#992a5b")
-                // myScript1(d.country);
-               
-               
-              })
-              .on("mousemove",function(d){
-                div
-              .transition()
-              .duration(200)
-              .style("opacity", .9);
-            div
-            .html(
-                "<b>COUNTRY: </b>" +
-                  d.country +
-                  "</br><b>CONFIRMED CASES: </b>" +
-                d.confirmed +
-                "</br><b>Death CASES: </b>" +
-                d.deaths +
-                "</br><b>Recovered CASES: </b>" +
-                d.recovered +
-                  "</br>AS OF " +
-                d.date
-              )
-              .attr("class","tooltip")
-              .style("left", d3.event.clientX + "px")
-              .style("top", d3.event.clientY - 28 + "px");
-              })
-            .on("mouseleave",function(){
-              d3.select(this).attr("fill", function(d)
-          {
-            if(currentvis=="confirm")return "#2a5599";
-            else if(currentvis=="death")return '#cb181d';//'#005a32''#99000d'  '#cb181d''#238b45'
-            else if(currentvis=="recovered") return '#238b45';
-          })   
-              div
-              .attr("class","tooltip")
-              .transition()
-              .duration(500)
-              .style("opacity", 0);
-            })
-          .on("click", d=>{
-              //console.log(d.country);
-               myScript1(d.region);
-               for ( s of store.time){
-         if( s.key == d.country){ linedata = s; break}
-       }
-      // console.log(linedata.values)
-      slidedata = linedata.values;
-       drawline(linedata.values)
-             // drawline(d.country, store.coronadat)
-      });
-
-
-
-
-
-      var lasso_start = function() {
-                  lasso.items() // reset size
-                      .classed("not_possible",true)
-                      .classed("selected",false)
-                      .classed("selected1",false);
-              };
-      
-              var lasso_draw = function() {
               
-                  // Style the possible dots
-                  lasso.possibleItems()
-                      .classed("not_possible",false)
-                      .classed("possible",true)
-                      .classed("selected1",false);
+
+              let l= d3.select("#BarChart").selectAll("rect")._groups[0]
+      
+      for(i=0;i<8;i++)
+      {
+       
+       
+        if(store.currentselectedregions.includes(l[i].__data__.region) )
+        {
           
-                  // Style the not possible dot
-                  lasso.notPossibleItems()
-                      .classed("not_possible",true)
-                      .classed("possible",false)
-                      .classed("selected1",false);
-              };
-      
-              var lasso_end = function() {
-                  // Reset the color of all dots
-                  lasso.items()
-                      .classed("not_possible",false)
-                      .classed("possible",false)
-                      .classed("isselected",false)
-                      
-      
-                  // Style the selected dots
-                  lasso.selectedItems()
-                      .classed("selected",true);
-                  
-                  let d=[];
-                  let cn=[]
-                  if(lasso.selectedItems()._groups[0].length==0)
-                  {
-                    d3.select(".res").text("Showing Results for All Countries");
-                  }
-                  if(lasso.selectedItems()._groups[0].length>0)
-                  {
-                  d3.select(".res").text("Showing Results for selected Countries");
-                  }
-                  for(i of lasso.selectedItems()._groups[0]){
-              if(i.__data__!=null)
-              {
-                d.push(i.__data__)
-                cn.push(i.__data__.country)
-              }
-      }
-      store.currentselectedcountries=cn;
-      total_case_print(d)
-      total_case_print1(d)
-      total_case_print2(d)
-
-      store.afterlasso=d
-      
-     l= d3.select("#G").selectAll("path")._groups[0]
-     for(i=0;i<180;i++)
-     {
-       if(cn.includes(l[i].__data__.country))
-       {
-        d3.select(l[i]).classed("selected1",false)
-         d3.select(l[i]).classed("selected",true)
-       }
-       else{
-         d3.select(l[i]).classed("selected1",false)
-         d3.select(l[i]).classed("selected",false)
-       }
-     }
-
-     if(d.length>0)afterbarlasso(lasso.selectedItems()._groups[0]);
-     else drawline(store.sumdate)
-     if(store.currentcommand!=null)
-       {
-         console.log("asci")
-         document.getElementById('command').value=store.currentcommand;
-         command();
-       }
-
-              };
-              
-              var lasso = d3.lasso()
-                  .closePathSelect(true)
-                  .closePathDistance(100)
-                  .targetArea(svg)
-                  .on("start",lasso_start)
-                  .on("draw",lasso_draw)
-                  .on("end",lasso_end);
-      
-              svg.call(lasso)
-              lasso.items(svg.selectAll('rect'))
-
-
-
-
-
-
-      let l= d3.selectAll("rect")._groups[0]
-      let ln=d3.selectAll("rect")._groups[0].length-6
-     for(i=0;i<ln;i++)
-     {
-      
-      
-       if(store.currentselectedcountries.includes(l[i].__data__.country) || store.currentselectedcountries.includes(l[i].__data__.country.toLowerCase()))
-       {
          
-        
-         d3.select(l[i]).classed("selected",true)
-        
-
-       }
-       else{
-         d3.select(l[i]).classed("selected",false)
-       }
-     }
-      
-
-  rects.exit().remove();
-};
-
+          d3.select(l[i]).classed("selected",true)
+         
+ 
+        }
+        else{
+          d3.select(l[i]).classed("selected",false)
+        }
+      }
 
 }
 
@@ -2979,16 +2817,16 @@ body
 .attr("stroke-width", 2)
 .attr("d", valueline)
 .attr("class", "line")
-.on("mouseenter", d=>{
+// .on("mouseenter", d=>{
             
-      showtool([d3.event.clientX -180, d3.event.clientY-30])
-    })
-.on("mouseleave", d=>{
-      d3.select("#tooltip").style('display', 'none')
-    })
-  .on("mousemove", d=>{
-      showtool([d3.event.clientX -180, d3.event.clientY-30])
-    })
+//       showtool([d3.event.clientX -180, d3.event.clientY-30])
+//     })
+// .on("mouseleave", d=>{
+//       d3.select("#tooltip").style('display', 'none')
+//     })
+//   .on("mousemove", d=>{
+//       showtool([d3.event.clientX -180, d3.event.clientY-30])
+//     })
 
 //draw line end 
 
@@ -3103,6 +2941,16 @@ body.append('g')
   else if(currentvis=="recovered")return '#238b45';
   else if(currentvis=="active")return 'orange';
 })
+.on("mouseenter", d=>{
+            
+            showtool([d3.event.clientX -180, d3.event.clientY-30])
+          })
+      .on("mouseleave", d=>{
+            d3.select("#tooltip").style('display', 'none')
+          })
+        .on("mousemove", d=>{
+            showtool([d3.event.clientX -180, d3.event.clientY-30])
+          })
 
 lasso(yscale(1), data, xscale)
 
@@ -3333,7 +3181,14 @@ setTimeout(slide,2000)
           drawMap(store.mapafterlinelasso)
 
         clearbar()
-        drawbar(a)
+        if(store.currentvis!="All Cases")
+        {
+          drawbar(a)
+        }
+        else{
+          drawstackbar(a)
+        }
+        
 
     //      drawCircles(store.done,"red")
     //  drawCirclesRecovered(store.done,"red")
@@ -3360,7 +3215,7 @@ setTimeout(slide,2000)
     //  {
       
       
-    //    if(store.currentselectedcountries.includes(l[i].__data__.country) || store.currentselectedcountries.includes(l[i].__data__.country.toLowerCase()))
+    //    if(store.currentselectedregions.includes(l[i].__data__.country) || store.currentselectedregions.includes(l[i].__data__.country.toLowerCase()))
     //    {
          
         
